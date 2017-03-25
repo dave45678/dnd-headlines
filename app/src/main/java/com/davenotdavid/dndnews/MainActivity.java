@@ -10,7 +10,9 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -38,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     // parameters.
     private static final String NEWS_ENDPOINT_URL = "https://newsapi.org/v1/articles";
 
+    // Field used for displaying a progress bar while fetching data from the HTTP server.
+    private ProgressBar mProgressBar;
+
     // TextView that is displayed when the list is empty.
     private TextView mEmptyStateTextView;
 
@@ -45,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Initializes the progress bar.
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         // Initializes a ListView for the list of Articles.
         mArticleListView = (ListView) findViewById(R.id.article_list);
@@ -113,6 +121,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         if (articles != null && !articles.isEmpty()) {
             mArticleAdapter.addAll(articles);
         }
+
+        // Hides the progress bar after the data-fetching process is complete.
+        mProgressBar.setVisibility(View.GONE);
 
         Log.d(LOG_TAG, "onLoadFinished");
     }
