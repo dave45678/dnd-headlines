@@ -150,6 +150,8 @@ public class QueryUtils {
                 JSONObject currentArticle = articleArray.getJSONObject(i);
 
                 // Extracts values for the following keys that are assisted with try/catch blocks.
+                // Only the top 10 articles are retrieved from the server, so it's essential that
+                // each of these gets added to the list despite some of its attributes being null.
                 String title;
                 try {
                     title = currentArticle.getString("title");

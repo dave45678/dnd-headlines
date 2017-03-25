@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -24,6 +23,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     // ListView initialization for the article list.
     private ListView mArticleListView;
 
+    // Adapter for the list of Articles.
+    private ArticleAdapter mArticleAdapter;
+
     // One loader ID at most for fetching news source data?
     // TODO: Consider using more than one loader for a refresh option for the latest articles.
     private static int articleLoaderID = 1;
@@ -37,7 +39,14 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initializes a ListView for the list of Articles.
         mArticleListView = (ListView) findViewById(R.id.article_list);
+
+        // Instantiates the following adapter that takes an empty array list as initial input.
+        mArticleAdapter = new ArticleAdapter(this, new ArrayList<Article>());
+
+        // Sets the adapter on the list view so the list can be populated in the UI.
+        mArticleListView.setAdapter(mArticleAdapter);
 
         // Retrieves a reference to the LoaderManager in order to interact with loaders.
         LoaderManager loaderManager = getLoaderManager();
@@ -66,17 +75,12 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     @Override
     public void onLoadFinished(Loader<List<Article>> loader, List<Article> articles) {
 
-        // TODO: Temporary; reconfigure the following code soon.
+        // Clears the adapter of previous article data.
+        mArticleAdapter.clear();
+
+        // Adds the list of Articles to the adapter's dataset should it not be null nor empty.
         if (articles != null && !articles.isEmpty()) {
-            List<String> articleList = new ArrayList<>();
-            for (int i = 0; i < articles.size(); i++) {
-                articleList.add(articles.get(i).getTitle());
-            }
-
-            ArrayAdapter<String> arrayAdapter =
-                    new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, articleList);
-
-            mArticleListView.setAdapter(arrayAdapter);
+            mArticleAdapter.addAll(articles);
         }
 
         Log.d(LOG_TAG, "onLoadFinished");
@@ -91,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     public void onLoaderReset(Loader<List<Article>> loader) {
         Log.d(LOG_TAG, "onLoaderReset()");
 
-        // TODO: Clear out the adapter's data clear.
+        // Clears out the existing data since the loader resetted.
+        mArticleAdapter.clear();
     }
 }
