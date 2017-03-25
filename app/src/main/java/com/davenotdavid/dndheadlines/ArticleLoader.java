@@ -1,4 +1,4 @@
-package com.davenotdavid.dndnews;
+package com.davenotdavid.dndheadlines;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;

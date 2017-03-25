@@ -1,4 +1,4 @@
-package com.davenotdavid.dndnews;
+package com.davenotdavid.dndheadlines;
 
 import android.util.Log;
 

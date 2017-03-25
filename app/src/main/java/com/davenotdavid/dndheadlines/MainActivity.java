@@ -1,4 +1,4 @@
-package com.davenotdavid.dndnews;
+package com.davenotdavid.dndheadlines;
 
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;

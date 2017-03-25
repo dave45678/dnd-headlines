@@ -1,4 +1,4 @@
-package com.davenotdavid.dndnews;
+package com.davenotdavid.dndheadlines;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

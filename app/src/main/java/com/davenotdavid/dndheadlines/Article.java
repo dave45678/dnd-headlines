@@ -1,4 +1,4 @@
-package com.davenotdavid.dndnews;
+package com.davenotdavid.dndheadlines;
 
 /**
  * Custom class that represents an article from a news source.
