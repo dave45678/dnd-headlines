@@ -8,7 +8,6 @@ public class Article {
     // String member fields of the class.
     private String mAuthor, mTitle, mDescription, mUrl, mUrlToImage, mPublishedAt;
 
-
     /**
      * Creates an {@link Article} object.
      *
