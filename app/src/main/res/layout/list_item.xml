@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:padding="@dimen/activity_padding">
+    android:layout_height="match_parent" android:padding="@dimen/activity_padding2">
 
     <TextView
         android:id="@+id/article_title"
+        android:textSize="19sp"
         android:textColor="@color/colorBlack"
-        android:maxLines="2"
+        android:maxLines="3"
         android:ellipsize="end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
