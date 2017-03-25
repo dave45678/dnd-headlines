@@ -2,12 +2,16 @@ package com.davenotdavid.dndnews;
 
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +38,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     // parameters.
     private static final String NEWS_ENDPOINT_URL = "https://newsapi.org/v1/articles";
 
+    // TextView that is displayed when the list is empty.
+    private TextView mEmptyStateTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,17 +49,38 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         // Initializes a ListView for the list of Articles.
         mArticleListView = (ListView) findViewById(R.id.article_list);
 
+        // Initializes and then sets the empty state TextView to the ListView for when it should be
+        // empty.
+        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
+        mArticleListView.setEmptyView(mEmptyStateTextView);
+
         // Instantiates the following adapter that takes an empty array list as initial input.
         mArticleAdapter = new ArticleAdapter(this, new ArrayList<Article>());
 
         // Sets the adapter on the list view so the list can be populated in the UI.
         mArticleListView.setAdapter(mArticleAdapter);
 
-        // Retrieves a reference to the LoaderManager in order to interact with loaders.
-        LoaderManager loaderManager = getLoaderManager();
+        // Retrieves a reference to the ConnectivityManager to check state of network connectivity.
+        ConnectivityManager mConnManager =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        // Passes in the single loader.
-        loaderManager.initLoader(articleLoaderID, null, this);
+        // Retrieves details on the currently active default data network.
+        NetworkInfo networkInfo = mConnManager.getActiveNetworkInfo();
+
+        // Initializes and runs loaders should there be network connection. Otherwise, displays UI
+        // related to an empty state.
+        if (networkInfo != null && networkInfo.isConnected()) {
+
+            // Retrieves a reference to the LoaderManager in order to interact with loaders.
+            LoaderManager loaderManager = getLoaderManager();
+
+            // Passes in the single loader.
+            loaderManager.initLoader(articleLoaderID, null, this);
+        } else {
+
+            // Updates empty state with a no-connection-error message.
+            mEmptyStateTextView.setText(R.string.no_internet_connection);
+        }
     }
 
     @Override
@@ -74,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
     @Override
     public void onLoadFinished(Loader<List<Article>> loader, List<Article> articles) {
+
+        // Sets the empty state text to display the following message.
+        mEmptyStateTextView.setText(R.string.no_results_found);
 
         // Clears the adapter of previous article data.
         mArticleAdapter.clear();

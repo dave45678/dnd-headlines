@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">DND News</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="no_results_found">Sorry! No headlines found.</string>
     <string name="void_title">VOID</string>
     
     <!-- News API key. -->
