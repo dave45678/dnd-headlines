@@ -3,7 +3,21 @@
     <string name="no_internet_connection">No internet connection</string>
     <string name="no_results_found">Sorry! No headlines found.</string>
     <string name="void_title">VOID</string>
-    
+
     <!-- News API key. -->
     <string name="news_api_key">c6f9761272e94a7fb5bdc53820093348</string>
+
+    <string name="settings_menu_item">Settings</string>
+    <string name="settings_title">Settings</string>
+
+    <!-- Preference attributes for news sources -->
+    <string name="settings_news_sources_label">News source</string>
+    <string name="settings_news_sources_key" translatable="false">NEWS_SOURCES</string>
+    <string name="settings_news_sources_default" translatable="false">@string/settings_news_sources_source1_value</string>
+
+    <!-- Labels and values (query parameters) for the following news sources -->
+    <string name="settings_news_sources_source1_label">Google News (default)</string>
+    <string name="settings_news_sources_source1_value" translatable="false">google-news</string>
+    <string name="settings_news_sources_source2_label">The Wall Street Journal</string>
+    <string name="settings_news_sources_source2_value" translatable="false">the-wall-street-journal</string>
 </resources>

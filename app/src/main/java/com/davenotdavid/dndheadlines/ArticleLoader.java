@@ -16,7 +16,7 @@ public class ArticleLoader extends AsyncTaskLoader<List<Article>> {
     private static final String LOG_TAG = ArticleLoader.class.getSimpleName();
 
     // URL used for querying in a server.
-    private static String mRequestUrl;
+    private String mRequestUrl;
 
     /**
      * Creates a new {@link ArticleLoader} object.

@@ -5,12 +5,16 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -22,7 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO: Fill this part out when ready.
+ * Loads up (with Loaders) to fetch data via an HTTP request of the News API that eventually
+ * displays the top news/headlines based on a certain news source (either default or user's stored
+ * preference).
  */
 public class MainActivity extends AppCompatActivity implements LoaderCallbacks<List<Article>> {
 
@@ -37,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
     // One loader ID at most for fetching news source data?
     // TODO: Consider using more than one loader for a refresh option for the latest articles.
-    private static int articleLoaderID = 1;
+    private int articleLoaderID = 1;
 
     // String constant that represents the News API endpoint URL that later appends query
     // parameters.
@@ -115,17 +121,44 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu); // Inflates the settings icon
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        // Runs the following code for each menu item.
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public Loader<List<Article>> onCreateLoader(int i, Bundle bundle) {
         Log.d(LOG_TAG, "onCreateLoader()");
+
+        // Preferences instantiation used to retrieve the user's stored data (news source
+        // preference in this case).
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String newsSource = sharedPrefs.getString(
+                getString(R.string.settings_news_sources_key),
+                getString(R.string.settings_news_sources_default)
+        );
 
         // Initializes the News API endpoint URL as a URI to build and eventually append upon.
         Uri baseUri = Uri.parse(NEWS_ENDPOINT_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
         // Appends the following query parameters onto the URI. The "sortBy" parameter is defaulted
-        // as "top news" for every source.
-        // TODO: Include a Preference option for the news source.
-        uriBuilder.appendQueryParameter("source", "google-news");
+        // as "top news" for every source. Also, the user's news source preference is appended.
+        uriBuilder.appendQueryParameter("source", newsSource);
         uriBuilder.appendQueryParameter("apiKey", getString(R.string.news_api_key));
 
         return new ArticleLoader(this, uriBuilder.toString());
