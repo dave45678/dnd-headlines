@@ -5,7 +5,7 @@
     <string name="void_title">VOID</string>
 
     <!-- News API key. -->
-    <string name="news_api_key">c6f9761272e94a7fb5bdc53820093348</string>
+    <string name="news_api_key" translatable="false">c6f9761272e94a7fb5bdc53820093348</string>
 
     <string name="settings_menu_item">Settings</string>
     <string name="settings_title">Settings</string>
@@ -13,11 +13,33 @@
     <!-- Preference attributes for news sources -->
     <string name="settings_news_sources_label">News source</string>
     <string name="settings_news_sources_key" translatable="false">NEWS_SOURCES</string>
-    <string name="settings_news_sources_default" translatable="false">@string/settings_news_sources_source1_value</string>
+    <string name="settings_news_sources_default" translatable="false">@string/settings_news_sources_source_default_value</string>
 
     <!-- Labels and values (query parameters) for the following news sources -->
-    <string name="settings_news_sources_source1_label">Google News (default)</string>
-    <string name="settings_news_sources_source1_value" translatable="false">google-news</string>
-    <string name="settings_news_sources_source2_label">The Wall Street Journal</string>
-    <string name="settings_news_sources_source2_value" translatable="false">the-wall-street-journal</string>
+    <string name="settings_news_sources_source1_label">Associated Press</string>
+    <string name="settings_news_sources_source1_value" translatable="false">associated-press</string>
+    <string name="settings_news_sources_source2_label">Bloomberg</string>
+    <string name="settings_news_sources_source2_value" translatable="false">bloomberg</string>
+    <string name="settings_news_sources_source3_label">Business Insider</string>
+    <string name="settings_news_sources_source3_value" translatable="false">business-insider</string>
+    <string name="settings_news_sources_source_default_label">Google News (default)</string>
+    <string name="settings_news_sources_source_default_value" translatable="false">google-news</string>
+    <string name="settings_news_sources_source4_label">Fortune</string>
+    <string name="settings_news_sources_source4_value" translatable="false">fortune</string>
+    <string name="settings_news_sources_source5_label">Fox Sports</string>
+    <string name="settings_news_sources_source5_value" translatable="false">fox-sports</string>
+    <string name="settings_news_sources_source6_label">Hacker News</string>
+    <string name="settings_news_sources_source6_value" translatable="false">hacker-news</string>
+    <string name="settings_news_sources_source7_label">IGN</string>
+    <string name="settings_news_sources_source7_value" translatable="false">ign</string>
+    <string name="settings_news_sources_source8_label">MTV News</string>
+    <string name="settings_news_sources_source8_value" translatable="false">mtv-news</string>
+    <string name="settings_news_sources_source9_label">National Geographic</string>
+    <string name="settings_news_sources_source9_value" translatable="false">national-geographic</string>
+    <string name="settings_news_sources_source10_label">NFL News</string>
+    <string name="settings_news_sources_source10_value" translatable="false">nfl-news</string>
+    <string name="settings_news_sources_source11_label">Reuters</string>
+    <string name="settings_news_sources_source11_value" translatable="false">reuters</string>
+    <string name="settings_news_sources_source12_label">The Wall Street Journal</string>
+    <string name="settings_news_sources_source12_value" translatable="false">the-wall-street-journal</string>
 </resources>
