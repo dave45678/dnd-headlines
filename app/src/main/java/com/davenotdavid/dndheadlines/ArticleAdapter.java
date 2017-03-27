@@ -115,20 +115,23 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
     }
 
     /**
-     * Modifies the UTC date-time by removing the 'T' and 'Z' chars, and rounding partial seconds
-     * (seconds with decimal) in order to satisfy DateTimeFormatter's format.
+     * Modifies the UTC date-time by removing the 'T' and 'Z' chars, and retrieving only the first
+     * two chars of seconds (in case of partial seconds such as decimals) in order to satisfy
+     * DateTimeFormat's format.
      *
      * @param utcDateTime is the UTC date-time according to ISO 8601 standards.
      */
     private String formatUTCDateTime(String utcDateTime) {
         StringBuilder dateTimeSb = new StringBuilder(utcDateTime);
-        dateTimeSb.deleteCharAt(utcDateTime.length() - 1); // Removes the 'Z' char
+        dateTimeSb.deleteCharAt(utcDateTime.length() - 1);
         String dateTime = dateTimeSb.toString();
-        String formattedDateTime = dateTime.replace('T', ' '); // Replaces the 'T' char with a space
+        String formattedDateTime = dateTime.replace('T', ' ');
         String[] dateTimeParts = formattedDateTime.split(" ");
         String[] timeParts = dateTimeParts[1].split(":");
-        String time = timeParts[0] + ":" + timeParts[1] + ":" +
-                Math.round(Double.parseDouble(timeParts[2])); // Rounds seconds with decimals
+        String time = timeParts[0] + ":" +
+                timeParts[1] + ":" +
+                String.valueOf(timeParts[2].charAt(0)) +
+                String.valueOf(timeParts[2].charAt(1));
         return dateTimeParts[0] + " " + time;
     }
 }
