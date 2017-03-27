@@ -2,19 +2,28 @@ package com.davenotdavid.dndheadlines;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.util.List;
+
+import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
 
 /**
  * Custom adapter, subclass of {@link ArrayAdapter}, that inflates views onto a ListView.
  */
 public class ArticleAdapter extends ArrayAdapter<Article> {
+
+    // Log tag constant.
+    private static final String LOG_TAG = ArticleAdapter.class.getSimpleName();
 
     /**
      * Creates a {@link ArticleAdapter} object.
@@ -46,9 +55,11 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
             convertView =
                     LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
 
-            // Initializes the following child view for the sake of not initializing it repeatedly.
+            // Initializes the following child views for the sake of not initializing them
+            // repeatedly.
             holder = new ViewHolder();
             holder.articleTitle = (TextView) convertView.findViewById(R.id.article_title);
+            holder.publishTimeAgo = (TextView) convertView.findViewById(R.id.publish_time_ago);
 
             // Associates the holder with the view for later lookup.
             convertView.setTag(holder);
@@ -69,11 +80,50 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
             holder.articleTitle.setText(R.string.void_title);
         }
 
+        // Initializes the following reference variable to render a view of how long ago the
+        // article was published as of now (user's locale time). Otherwise, hides the view.
+        String articlePubDateTime = currentArticle.getPublishedAt();
+        if (!articlePubDateTime.isEmpty() && !articlePubDateTime.equals("null")) { // JSON apparently returns a null string
+
+            // DateTimeFormatter initialized that's used to retrieve the UTC (4 hours faster than
+            // EST) time in milliseconds of when the article was published.
+            DateTimeFormatter formatter = DateTimeFormat
+                    .forPattern("yyyy-MM-dd HH:mm:ss")
+                    .withZoneUTC();
+            long millisecondsSinceUnixEpoch =
+                    formatter.parseMillis(formatUTCDateTime(articlePubDateTime));
+
+            // Uses one of DateUtils' static methods to compare how long ago the article was
+            // published (e.g. 37min ago, 5hours ago, and etc.).
+            CharSequence relativeTime = DateUtils.getRelativeTimeSpanString(
+                    millisecondsSinceUnixEpoch,
+                    System.currentTimeMillis(),
+                    MINUTE_IN_MILLIS); // Minimum time to be displayed (secs would constitute as "0min ago")
+
+            holder.publishTimeAgo.setText(relativeTime.toString());
+        } else {
+            holder.publishTimeAgo.setVisibility(View.INVISIBLE);
+        }
+
         return convertView;
     }
 
     // ViewHolder class used to hold the set of child views.
     private static class ViewHolder {
         TextView articleTitle;
+        TextView publishTimeAgo;
+    }
+
+    /**
+     * Modifies the UTC date-time by removing the 'T' and 'Z' chars in order to satisfy
+     * DateTimeFormatter's format.
+     *
+     * @param utcDateTime is the UTC date-time according to ISO 8601 standards.
+     */
+    private String formatUTCDateTime(String utcDateTime) {
+        StringBuilder dateTimeSb = new StringBuilder(utcDateTime);
+        dateTimeSb.deleteCharAt(utcDateTime.length() - 1); // Removes the 'Z' char
+        String formattedDateTime = dateTimeSb.toString();
+        return formattedDateTime.replace('T', ' '); // Replaces the 'T' char with a space
     }
 }
