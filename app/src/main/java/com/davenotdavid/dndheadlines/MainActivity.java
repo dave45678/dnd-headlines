@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 // intent. Otherwise, displays a Toast message informing the user that the URL
                 // doesn't exist.
                 String articleUrl = mArticleAdapter.getItem(position).getUrl();
-                if (!articleUrl.isEmpty()) {
+                if (!articleUrl.equals("null")) {
                     Uri articlePreviewUrl = Uri.parse(articleUrl);
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, articlePreviewUrl);
                     startActivity(browserIntent);

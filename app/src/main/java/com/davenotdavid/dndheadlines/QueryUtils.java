@@ -156,28 +156,28 @@ public class QueryUtils {
                 try {
                     title = currentArticle.getString("title");
                 } catch (JSONException e) {
-                    title = ""; // Returns an empty string otherwise
+                    title = "null"; // Returns a null string otherwise since the server returns these values anyways
                 }
 
                 String url;
                 try {
                     url = currentArticle.getString("url");
                 } catch (JSONException e) {
-                    url = "";
+                    url = "null";
                 }
 
                 String urlToImage;
                 try {
                     urlToImage = currentArticle.getString("urlToImage");
                 } catch (JSONException e) {
-                    urlToImage = "";
+                    urlToImage = "null";
                 }
 
                 String publishedAt;
                 try {
                     publishedAt = currentArticle.getString("publishedAt");
                 } catch (JSONException e) {
-                    publishedAt = "";
+                    publishedAt = "null";
                 }
 
                 // Creates a new Article with the extracted values from the JSON response.

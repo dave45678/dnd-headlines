@@ -83,7 +83,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         // Initializes the following reference variable to render a view of how long ago the
         // article was published as of now (user's locale time). Otherwise, hides the view.
         String articlePubDateTime = currentArticle.getPublishedAt();
-        if (!articlePubDateTime.isEmpty() && !articlePubDateTime.equals("null")) { // JSON apparently returns a null string
+        if (!articlePubDateTime.equals("null")) { // JSON apparently returns a null string
 
             // DateTimeFormatter initialized that's used to retrieve the UTC (4 hours faster than
             // EST) time in milliseconds of when the article was published.
