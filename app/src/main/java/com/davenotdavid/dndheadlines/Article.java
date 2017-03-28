@@ -6,20 +6,18 @@ package com.davenotdavid.dndheadlines;
 public class Article {
 
     // String member fields of the class.
-    private String mTitle, mUrl, mUrlToImage, mPublishedAt;
+    private String mTitle, mUrl, mPublishedAt;
 
     /**
      * Creates an {@link Article} object.
      *
      * @param title is the title of the article.
      * @param url is the URL of the article.
-     * @param urlToImage is the image (thumbnail) URL of the article.
      * @param publishedAt is the date and time the article was published.
      */
-    public Article(String title, String url, String urlToImage, String publishedAt) {
+    public Article(String title, String url, String publishedAt) {
         mTitle = title;
         mUrl = url;
-        mUrlToImage = urlToImage;
         mPublishedAt = publishedAt;
     }
 
@@ -38,13 +36,6 @@ public class Article {
     }
 
     /**
-     * Getter method for the article's image (thumbnail) URL.
-     */
-    public String getUrlToImage() {
-        return mUrlToImage;
-    }
-
-    /**
      * Getter method for the article's publish date/time.
      */
     public String getPublishedAt() {
@@ -59,7 +50,6 @@ public class Article {
         return "Article{" +
                 "mTitle='" + mTitle + '\'' +
                 ", mUrl='" + mUrl + '\'' +
-                ", mUrlToImage='" + mUrlToImage + '\'' +
                 ", mPublishedAt='" + mPublishedAt + '\'' +
                 '}';
     }
@@ -78,9 +68,6 @@ public class Article {
 
         if (mTitle != null ? !mTitle.equals(article.mTitle) : article.mTitle != null) return false;
         if (mUrl != null ? !mUrl.equals(article.mUrl) : article.mUrl != null) return false;
-        if (mUrlToImage != null ? !mUrlToImage.equals(article.mUrlToImage) :
-                article.mUrlToImage != null)
-            return false;
         return mPublishedAt != null ? mPublishedAt.equals(article.mPublishedAt) :
                 article.mPublishedAt == null;
 

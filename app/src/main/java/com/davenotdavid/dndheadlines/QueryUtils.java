@@ -166,13 +166,6 @@ public class QueryUtils {
                     url = "null";
                 }
 
-                String urlToImage;
-                try {
-                    urlToImage = currentArticle.getString("urlToImage");
-                } catch (JSONException e) {
-                    urlToImage = "null";
-                }
-
                 String publishedAt;
                 try {
                     publishedAt = currentArticle.getString("publishedAt");
@@ -181,7 +174,7 @@ public class QueryUtils {
                 }
 
                 // Creates a new Article with the extracted values from the JSON response.
-                Article article = new Article(title, url, urlToImage, publishedAt);
+                Article article = new Article(title, url, publishedAt);
 
                 // Adds each Article object to the list of articles.
                 articles.add(article);
