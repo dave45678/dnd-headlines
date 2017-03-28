@@ -88,6 +88,16 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         // Enables nested scrolling for the ListView which only works for Lollipop (21) and above.
         ViewCompat.setNestedScrollingEnabled(mArticleListView, true);
 
+        // Sets the custom News API attribution image clickable for branding guideline purposes.
+        findViewById(R.id.news_api_att_img).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri newsApiAttUrl = Uri.parse("https://newsapi.org/");
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, newsApiAttUrl);
+                startActivity(browserIntent);
+            }
+        });
+
         // Initializes and then sets the empty state TextView to the ListView for when it should be
         // empty.
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);

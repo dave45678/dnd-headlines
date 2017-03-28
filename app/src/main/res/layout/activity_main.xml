@@ -67,8 +67,17 @@
 
         <ListView
             android:id="@+id/article_list"
+            android:layout_above="@+id/news_api_att_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/news_api_att_img"
+            android:src="@drawable/news_api_attribution_image"
+            android:background="@color/colorNewsApi"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="55dp" />
 
     </RelativeLayout>
 
