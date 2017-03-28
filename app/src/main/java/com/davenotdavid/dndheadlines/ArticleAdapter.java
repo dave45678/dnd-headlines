@@ -74,13 +74,15 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 
         // Sets the article's title as text with ranks (top 10). Otherwise (which is unlikely, but
         // better safe than sorry!), "<VOID>" is set.
-        String titleText = String.valueOf(position + 1) + ". ";
+        String rankText = String.valueOf(position + 1) + ". ";
+        StringBuilder titleSb = new StringBuilder();
+        titleSb.append(rankText);
         if (!currentArticle.getTitle().isEmpty()) {
-            titleText += currentArticle.getTitle();
+            titleSb.append(currentArticle.getTitle());
         } else {
-            titleText += "<VOID>";
+            titleSb.append("<VOID>");
         }
-        holder.articleTitle.setText(titleText);
+        holder.articleTitle.setText(titleSb.toString());
 
         // Initializes the following reference variable to render a view of how long ago the
         // article was published as of now (user's locale time). Otherwise, hides the view.
