@@ -20,16 +20,16 @@
     <string name="settings_news_sources_source1_value" translatable="false">associated-press</string>
     <string name="settings_news_sources_source2_label">Bloomberg</string>
     <string name="settings_news_sources_source2_value" translatable="false">bloomberg</string>
-    <string name="settings_news_sources_source3_label">Business Insider</string>
-    <string name="settings_news_sources_source3_value" translatable="false">business-insider</string>
+    <string name="settings_news_sources_source3_label">Breitbart News</string>
+    <string name="settings_news_sources_source3_value" translatable="false">breitbart-news</string>
+    <string name="settings_news_sources_source4_label">Business Insider</string>
+    <string name="settings_news_sources_source4_value" translatable="false">business-insider</string>
     <string name="settings_news_sources_source_default_label">Google News (default)</string>
     <string name="settings_news_sources_source_default_value" translatable="false">google-news</string>
-    <string name="settings_news_sources_source4_label">Fortune</string>
-    <string name="settings_news_sources_source4_value" translatable="false">fortune</string>
-    <string name="settings_news_sources_source5_label">Fox Sports</string>
-    <string name="settings_news_sources_source5_value" translatable="false">fox-sports</string>
-    <string name="settings_news_sources_source6_label">Hacker News</string>
-    <string name="settings_news_sources_source6_value" translatable="false">hacker-news</string>
+    <string name="settings_news_sources_source5_label">Fortune</string>
+    <string name="settings_news_sources_source5_value" translatable="false">fortune</string>
+    <string name="settings_news_sources_source6_label">Fox Sports</string>
+    <string name="settings_news_sources_source6_value" translatable="false">fox-sports</string>
     <string name="settings_news_sources_source7_label">IGN</string>
     <string name="settings_news_sources_source7_value" translatable="false">ign</string>
     <string name="settings_news_sources_source8_label">MTV News</string>
