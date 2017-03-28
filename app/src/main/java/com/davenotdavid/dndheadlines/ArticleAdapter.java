@@ -77,7 +77,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         String rankText = String.valueOf(position + 1) + ". ";
         StringBuilder titleSb = new StringBuilder();
         titleSb.append(rankText);
-        if (!currentArticle.getTitle().isEmpty()) {
+        if (!currentArticle.getTitle().equals("null")) { // JSON apparently returns a null string
             titleSb.append(currentArticle.getTitle());
         } else {
             titleSb.append("<VOID>");
