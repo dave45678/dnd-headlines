@@ -72,13 +72,15 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         // Initializes the following Article being viewed at the moment.
         Article currentArticle = getItem(position);
 
-        // Sets the article's title as text. Otherwise (which is unlikely, but better safe than
-        // sorry!), "VOID" is setted.
+        // Sets the article's title as text with ranks (top 10). Otherwise (which is unlikely, but
+        // better safe than sorry!), "<VOID>" is set.
+        String titleText = String.valueOf(position + 1) + ". ";
         if (!currentArticle.getTitle().isEmpty()) {
-            holder.articleTitle.setText(currentArticle.getTitle());
+            titleText += currentArticle.getTitle();
         } else {
-            holder.articleTitle.setText(R.string.void_title);
+            titleText += "<VOID>";
         }
+        holder.articleTitle.setText(titleText);
 
         // Initializes the following reference variable to render a view of how long ago the
         // article was published as of now (user's locale time). Otherwise, hides the view.
