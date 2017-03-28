@@ -10,17 +10,23 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.androidquery.AQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,22 +55,38 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     // parameters.
     private static final String NEWS_ENDPOINT_URL = "https://newsapi.org/v1/articles";
 
+    // Field used to retrieve the news-source parameter.
+    private String newsSource;
+
     // Field used for displaying a progress bar while fetching data from the HTTP server.
     private ProgressBar mProgressBar;
 
     // TextView that is displayed when the list is empty.
     private TextView mEmptyStateTextView;
 
+    // Android Query (AQuery) field used for caching images from online.
+    private AQuery mAQuery;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Instantiates the following to cache images with a URL.
+        mAQuery = new AQuery(this);
+
+        // Initializes a custom Toolbar that gets displayed as it collapses.
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         // Initializes the progress bar.
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         // Initializes a ListView for the list of Articles.
         mArticleListView = (ListView) findViewById(R.id.article_list);
+
+        // Enables nested scrolling for the ListView which only works for Lollipop (21) and above.
+        ViewCompat.setNestedScrollingEnabled(mArticleListView, true);
 
         // Initializes and then sets the empty state TextView to the ListView for when it should be
         // empty.
@@ -147,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         // Preferences instantiation used to retrieve the user's stored data (news source
         // preference in this case).
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String newsSource = sharedPrefs.getString(
+        newsSource = sharedPrefs.getString(
                 getString(R.string.settings_news_sources_key),
                 getString(R.string.settings_news_sources_default)
         );
@@ -161,6 +183,39 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         uriBuilder.appendQueryParameter("source", newsSource);
         uriBuilder.appendQueryParameter("apiKey", getString(R.string.news_api_key));
 
+        // Initializes the following toolbar layout to set up the respective news source as its
+        // title.
+        CollapsingToolbarLayout collapsingToolbar =
+                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        if (newsSource.equals(getString(R.string.settings_news_sources_source1_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source1_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_source2_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source2_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_source3_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source3_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_source4_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source4_label));
+        } else if (newsSource.equals(getString
+                (R.string.settings_news_sources_source_default_value))) {
+            collapsingToolbar.setTitle(getString(R.string.google_news));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_source5_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source5_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_source6_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source6_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_source7_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source7_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_source8_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source8_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_source9_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source9_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_source10_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source10_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_source11_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source11_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_source12_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source12_label));
+        }
+
         return new ArticleLoader(this, uriBuilder.toString());
     }
 
@@ -173,9 +228,30 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         // Clears the adapter of previous article data.
         mArticleAdapter.clear();
 
-        // Adds the list of Articles to the adapter's dataset should it not be null nor empty.
+        // Adds the list of Articles to the adapter's dataset, and renders backdrop images
+        // accordingly should it not be null nor empty. Otherwise, renders app logo.
+        ImageView backdropImg = (ImageView) findViewById(R.id.backdrop);
         if (articles != null && !articles.isEmpty()) {
             mArticleAdapter.addAll(articles);
+
+            // Renders the backdrop image accordingly should the news source not be National
+            // Geographic (their images are too big to scale down). Otherwise, renders National
+            // Geographic's logo.
+            if (!newsSource.equals("national-geographic")) {
+                for (int i = 0; i < articles.size(); i++) {
+                    String urlToImage = articles.get(i).getUrlToImage();
+                    if (urlToImage.contains("http") || urlToImage.contains("https")) { // Custom way of validating News API's image URLs
+                        mAQuery.id(backdropImg).image(urlToImage);
+                        break;
+                    } else if (i == articles.size() - 1) { // Renders app's logo otherwise
+                        backdropImg.setImageResource(R.drawable.app_logo);
+                    }
+                }
+            } else {
+                backdropImg.setImageResource(R.drawable.national_geo_logo);
+            }
+        } else {
+            backdropImg.setImageResource(R.drawable.app_logo);
         }
 
         // Hides the progress bar after the data-fetching process is complete.
