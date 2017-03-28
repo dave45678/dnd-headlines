@@ -7,6 +7,7 @@
         <item>@string/settings_news_sources_source4_label</item>
         <item>@string/settings_news_sources_source_default_label</item>
         <item>@string/settings_news_sources_source5_label</item>
+        <item>@string/settings_news_sources_source6_label</item>
         <item>@string/settings_news_sources_source7_label</item>
         <item>@string/settings_news_sources_source8_label</item>
         <item>@string/settings_news_sources_source9_label</item>
@@ -22,6 +23,7 @@
         <item>@string/settings_news_sources_source4_value</item>
         <item>@string/settings_news_sources_source_default_value</item>
         <item>@string/settings_news_sources_source5_value</item>
+        <item>@string/settings_news_sources_source6_value</item>
         <item>@string/settings_news_sources_source7_value</item>
         <item>@string/settings_news_sources_source8_value</item>
         <item>@string/settings_news_sources_source9_value</item>
