@@ -104,7 +104,14 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
                     System.currentTimeMillis(),
                     MINUTE_IN_MILLIS); // Minimum time to be displayed (secs would constitute as "0min ago")
 
-            holder.publishTimeAgo.setText(relativeTime.toString());
+            // Initially converts relativeTime to a String to possibly set the following TextView
+            // as "just now!". Otherwise, sets the publish time as is.
+            String relativeTimeString = relativeTime.toString();
+            if (relativeTimeString.equals("0 minutes ago")) {
+                holder.publishTimeAgo.setText(R.string.just_now_text);
+            } else {
+                holder.publishTimeAgo.setText(relativeTimeString);
+            }
         } else {
             holder.publishTimeAgo.setVisibility(View.INVISIBLE);
         }
