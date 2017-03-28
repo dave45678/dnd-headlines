@@ -72,6 +72,38 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Invokes the following to initialize/instantiate UI.
+        init();
+
+        // Invokes the following to begin the data-fetching process via loaders.
+        runLoaders();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu); // Inflates the settings icon
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        // Runs the following code for each menu item.
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Initialization/instantiation method for UI.
+     */
+    private void init() {
+
         // Instantiates the following to cache images with a URL.
         mAQuery = new AQuery(this);
 
@@ -128,6 +160,12 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 }
             }
         });
+    }
+
+    /**
+     * Runs loaders to fetch data via an HTTP request URL only if the user's device has connection.
+     */
+    private void runLoaders() {
 
         // Retrieves a reference to the ConnectivityManager to check state of network connectivity.
         ConnectivityManager mConnManager =
@@ -150,26 +188,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             // Updates empty state with a no-connection-error message.
             mEmptyStateTextView.setText(R.string.no_internet_connection);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu); // Inflates the settings icon
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        // Runs the following code for each menu item.
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent settingsIntent = new Intent(this, SettingsActivity.class);
-                startActivity(settingsIntent);
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
