@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     private static final String NEWS_ENDPOINT_URL = "https://newsapi.org/v1/articles";
 
     // Field used to retrieve the news-source parameter.
-    private String newsSource;
+    private static String newsSource;
 
     // Field used for displaying a progress bar while fetching data from the HTTP server.
     private ProgressBar mProgressBar;
