@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     private ArticleAdapter mArticleAdapter;
 
     // Loader ID that later gets incremented for a refresh-page UI.
-    private int articleLoaderID = 1;
+    private static int articleLoaderID = 1;
 
     // String constant that represents the News API endpoint URL that later appends query
     // parameters.
@@ -174,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 // Increments the loader ID so new data could be fetched for the current news
                 // source.
                 articleLoaderID++;
+                Log.d(LOG_TAG, String.valueOf(articleLoaderID));
 
                 // Reruns the loaders.
                 runLoaders();
@@ -185,30 +186,41 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
      * Runs loaders to fetch data via an HTTP request URL only if the user's device has connection.
      */
     private void runLoaders() {
+        Log.d(LOG_TAG, "runLoaders()");
 
-        // Retrieves a reference to the ConnectivityManager to check state of network connectivity.
-        ConnectivityManager mConnManager =
+        // Retrieves a reference to the LoaderManager in order to interact with loaders.
+        LoaderManager loaderManager = getLoaderManager();
+
+        // Initializes the ConnectivityManager to check state of network connectivity.
+        ConnectivityManager connManager =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         // Retrieves details on the currently active default data network.
-        NetworkInfo networkInfo = mConnManager.getActiveNetworkInfo();
+        NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
 
         // Initializes and runs loaders should there be network connection. Otherwise, displays UI
         // related to an empty state.
         if (networkInfo != null && networkInfo.isConnected()) {
+            Log.d(LOG_TAG, "runLoaders(): Connected to network");
 
-            // Retrieves a reference to the LoaderManager in order to interact with loaders.
-            LoaderManager loaderManager = getLoaderManager();
-
-            Log.d(LOG_TAG, String.valueOf(articleLoaderID));
+            // Displays the ProgressBar only if the user has network connection.
+            mProgressBar.setVisibility(View.VISIBLE);
 
             // Passes in a loader that could either be a single loader or multiple loaders for a
             // refresh-page UI.
             loaderManager.initLoader(articleLoaderID, null, this);
         } else {
+            Log.d(LOG_TAG, "runLoaders(): Can't connect to network");
 
-            // Updates empty state with a no-connection-error message.
-            mEmptyStateTextView.setText(R.string.no_internet_connection);
+            // Displays the following Toast message, and clears the previous article data should
+            // the user lose network connection mid-session.
+            if (pageRefresh) {
+                Toast.makeText(this, "No network connection.", Toast.LENGTH_SHORT).show();
+                mArticleAdapter.clear();
+            }
+
+            // Updates the empty state view with a no-connection-error message.
+            mEmptyStateTextView.setText(R.string.no_network_connection);
         }
     }
 
@@ -238,9 +250,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
     @Override
     public void onLoadFinished(Loader<List<Article>> loader, List<Article> articles) {
-
-        // Sets the empty state text to display the following message.
-        mEmptyStateTextView.setText(R.string.no_results_found);
 
         // Clears the adapter of previous article data.
         mArticleAdapter.clear();
@@ -279,9 +288,11 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         }
 
         // Adds the list of Articles to the adapter's dataset, and renders backdrop images
-        // accordingly should it not be null nor empty. Otherwise, renders app logo.
+        // accordingly should it not be null nor empty.
         ImageView backdropImg = (ImageView) findViewById(R.id.backdrop);
         if (articles != null && !articles.isEmpty()) {
+            Log.d(LOG_TAG, "onLoadFinished(): Adding articles and rendering backdrop images");
+
             mArticleAdapter.addAll(articles);
 
             // Renders the backdrop image accordingly should the news source not be National
@@ -293,26 +304,25 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                     if (urlToImage.contains("http") || urlToImage.contains("https")) { // Custom way of validating News API's image URLs
                         mAQuery.id(backdropImg).image(urlToImage);
                         break;
-                    } else if (i == articles.size() - 1) { // Renders app's logo otherwise
-                        backdropImg.setImageResource(R.drawable.app_logo);
                     }
                 }
             } else {
                 backdropImg.setImageResource(R.drawable.national_geo_logo);
             }
 
-            // Displays the following Toast message and sets the flag back to false should the page
-            // button be pressed.
+            // Displays the following Toast message and then sets the flag for page refreshing to
+            // false.
             if (pageRefresh) {
                 Toast.makeText(this, "Page refreshed", Toast.LENGTH_SHORT).show();
                 pageRefresh = false;
             }
-        } else {
-            backdropImg.setImageResource(R.drawable.app_logo);
         }
 
+        // Updates the empty state view with a no-results-found message.
+        mEmptyStateTextView.setText(R.string.no_results_found);
+
         // Hides the progress bar after the data-fetching process is complete.
-        mProgressBar.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.INVISIBLE);
 
         Log.d(LOG_TAG, "onLoadFinished");
     }
