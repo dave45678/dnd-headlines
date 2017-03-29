@@ -91,7 +91,7 @@
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|right|end"
         app:rippleColor="@color/colorAccentLight"
-        android:src="@drawable/ic_settings_white"
+        android:src="@drawable/ic_refresh_white"
         android:layout_margin="@dimen/activity_padding" />
 
 </android.support.design.widget.CoordinatorLayout>
