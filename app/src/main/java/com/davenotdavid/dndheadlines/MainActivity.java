@@ -3,6 +3,7 @@ package com.davenotdavid.dndheadlines;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
@@ -13,6 +14,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -360,5 +362,24 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
         // Clears out the existing data since the loader resetted.
         mArticleAdapter.clear();
+    }
+
+    /**
+     * Invoked when the user presses the navigation key, back button.
+     */
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("DND Headlines")
+                .setMessage("Are you sure you want to exit the app?")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                        // Implements the back button's function by exiting the app.
+                        MainActivity.super.onBackPressed();
+                    }
+                }).create().show();
     }
 }
