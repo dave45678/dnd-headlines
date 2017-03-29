@@ -227,6 +227,18 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         uriBuilder.appendQueryParameter("source", newsSource);
         uriBuilder.appendQueryParameter("apiKey", getString(R.string.news_api_key));
 
+        return new ArticleLoader(this, uriBuilder.toString());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Article>> loader, List<Article> articles) {
+
+        // Sets the empty state text to display the following message.
+        mEmptyStateTextView.setText(R.string.no_results_found);
+
+        // Clears the adapter of previous article data.
+        mArticleAdapter.clear();
+
         // Initializes the following toolbar layout to set up the respective news source as its
         // title.
         CollapsingToolbarLayout collapsingToolbar =
@@ -259,18 +271,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         } else if (newsSource.equals(getString(R.string.settings_news_sources_source12_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source12_label));
         }
-
-        return new ArticleLoader(this, uriBuilder.toString());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<Article>> loader, List<Article> articles) {
-
-        // Sets the empty state text to display the following message.
-        mEmptyStateTextView.setText(R.string.no_results_found);
-
-        // Clears the adapter of previous article data.
-        mArticleAdapter.clear();
 
         // Adds the list of Articles to the adapter's dataset, and renders backdrop images
         // accordingly should it not be null nor empty. Otherwise, renders app logo.
