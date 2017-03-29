@@ -206,8 +206,18 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             // Displays the ProgressBar only if the user has network connection.
             mProgressBar.setVisibility(View.VISIBLE);
 
-            // Temporarily hides the ListView for a page-refreshing UI.
-            if (pageRefresh) mArticleListView.setVisibility(View.INVISIBLE);
+            // When the refresh button is pressed, the ListView and empty state TextView will
+            // temporarily be hidden for a page-refreshing UI.
+            if (pageRefresh) {
+                mArticleListView.setVisibility(View.INVISIBLE);
+
+                // Temporarily hides the TextView only if it's already visible. Apparently, the
+                // visibility is set back when the text is set when encountering another empty
+                // state.
+                if (mEmptyStateTextView.getVisibility() == View.VISIBLE) {
+                    mEmptyStateTextView.setVisibility(View.INVISIBLE);
+                }
+            }
 
             // Passes in a loader that could either be a single loader or multiple loaders for a
             // refresh-page UI.
@@ -218,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             // Displays the following Toast message, and clears the previous article data should
             // the user lose network connection mid-session.
             if (pageRefresh) {
-                Toast.makeText(this, "No network connection.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "No network connection", Toast.LENGTH_SHORT).show();
                 mArticleAdapter.clear();
             }
 
