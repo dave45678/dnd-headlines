@@ -206,6 +206,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             // Displays the ProgressBar only if the user has network connection.
             mProgressBar.setVisibility(View.VISIBLE);
 
+            // Temporarily hides the ListView for a page-refreshing UI.
+            if (pageRefresh) mArticleListView.setVisibility(View.INVISIBLE);
+
             // Passes in a loader that could either be a single loader or multiple loaders for a
             // refresh-page UI.
             loaderManager.initLoader(articleLoaderID, null, this);
@@ -310,13 +313,15 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 backdropImg.setImageResource(R.drawable.national_geo_logo);
             }
 
-            // Displays the following Toast message and then sets the flag for page refreshing to
-            // false.
-            if (pageRefresh) {
-                Toast.makeText(this, "Page refreshed", Toast.LENGTH_SHORT).show();
-                pageRefresh = false;
-            }
+            // Displays the following Toast message when the page is refreshed.
+            if (pageRefresh) Toast.makeText(this, "Page refreshed", Toast.LENGTH_SHORT).show();
         }
+
+        // Sets the ListView visible, particularly for page-refreshing purposes.
+        mArticleListView.setVisibility(View.VISIBLE);
+
+        // Sets the flag for page refreshing back to false.
+        pageRefresh = false;
 
         // Updates the empty state view with a no-results-found message.
         mEmptyStateTextView.setText(R.string.no_results_found);
