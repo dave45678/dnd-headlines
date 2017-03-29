@@ -60,7 +60,7 @@
 
         <TextView
             android:id="@+id/empty_view"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="@color/colorBlack"
             android:padding="@dimen/activity_padding"
             android:layout_centerHorizontal="true"
