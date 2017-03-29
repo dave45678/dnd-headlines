@@ -66,6 +66,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     // Android Query (AQuery) field used for caching images from online.
     private AQuery mAQuery;
 
+    // Boolean flag used for indicating whether the refresh button was pressed or not.
+    private boolean pageRefresh;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,6 +167,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         findViewById(R.id.refresh_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                // Sets the flag to true to be addressed later on.
+                pageRefresh = true;
 
                 // Increments the loader ID so new data could be fetched for the current news
                 // source.
@@ -293,6 +299,13 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 }
             } else {
                 backdropImg.setImageResource(R.drawable.national_geo_logo);
+            }
+
+            // Displays the following Toast message and sets the flag back to false should the page
+            // button be pressed.
+            if (pageRefresh) {
+                Toast.makeText(this, "Page refreshed", Toast.LENGTH_SHORT).show();
+                pageRefresh = false;
             }
         } else {
             backdropImg.setImageResource(R.drawable.app_logo);
