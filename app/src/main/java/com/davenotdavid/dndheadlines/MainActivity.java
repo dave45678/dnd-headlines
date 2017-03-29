@@ -47,8 +47,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     // Adapter for the list of Articles.
     private ArticleAdapter mArticleAdapter;
 
-    // One loader ID at most for fetching news source data?
-    // TODO: Consider using more than one loader for a refresh option for the latest articles.
+    // Loader ID that later gets incremented for a refresh-page UI.
     private int articleLoaderID = 1;
 
     // String constant that represents the News API endpoint URL that later appends query
@@ -160,6 +159,20 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 }
             }
         });
+
+        // Sets the floating action button clickable with the following refresh functionality.
+        findViewById(R.id.refresh_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Increments the loader ID so new data could be fetched for the current news
+                // source.
+                articleLoaderID++;
+
+                // Reruns the loaders.
+                runLoaders();
+            }
+        });
     }
 
     /**
@@ -181,7 +194,10 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             // Retrieves a reference to the LoaderManager in order to interact with loaders.
             LoaderManager loaderManager = getLoaderManager();
 
-            // Passes in the single loader.
+            Log.d(LOG_TAG, String.valueOf(articleLoaderID));
+
+            // Passes in a loader that could either be a single loader or multiple loaders for a
+            // refresh-page UI.
             loaderManager.initLoader(articleLoaderID, null, this);
         } else {
 
