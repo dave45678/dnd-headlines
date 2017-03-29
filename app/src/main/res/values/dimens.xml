@@ -25,10 +25,28 @@
     <dimen name="activity_padding7">48dp</dimen>
     <dimen name="activity_horizontal_margin7">48dp</dimen>
     <dimen name="activity_vertical_margin7">48dp</dimen>
+    <dimen name="activity_padding8">56dp</dimen>
+    <dimen name="activity_horizontal_margin8">56dp</dimen>
+    <dimen name="activity_vertical_margin8">56dp</dimen>
+    <dimen name="activity_padding9">64dp</dimen>
+    <dimen name="activity_horizontal_margin9">64dp</dimen>
+    <dimen name="activity_vertical_margin9">64dp</dimen>
+    <dimen name="activity_padding10">72dp</dimen>
+    <dimen name="activity_horizontal_margin10">72dp</dimen>
+    <dimen name="activity_vertical_margin10">72dp</dimen>
+    <dimen name="activity_padding11">80dp</dimen>
+    <dimen name="activity_horizontal_margin11">80dp</dimen>
+    <dimen name="activity_vertical_margin11">80dp</dimen>
+    <dimen name="activity_padding12">88dp</dimen>
+    <dimen name="activity_horizontal_margin12">88dp</dimen>
+    <dimen name="activity_vertical_margin12">88dp</dimen>
+    <dimen name="activity_padding13">96dp</dimen>
+    <dimen name="activity_horizontal_margin13">96dp</dimen>
+    <dimen name="activity_vertical_margin13">96dp</dimen>
 
     <!-- Custom heights for the app bar layout. -->
     <dimen name="detail_backdrop_height_small">176dp</dimen>
     <dimen name="detail_backdrop_height_norm">256dp</dimen>
     <dimen name="detail_backdrop_height_large">390dp</dimen>
-    <dimen name="detail_backdrop_height_xlarge">420dp</dimen>
+    <dimen name="detail_backdrop_height_xlarge">480dp</dimen>
 </resources>
