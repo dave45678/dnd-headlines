@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -163,10 +164,16 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             }
         });
 
+        // MediaPlayer object used for sound UI.
+        final MediaPlayer buttonSound = MediaPlayer.create(this, R.raw.button_sound);
+
         // Sets the floating action button clickable with the following refresh functionality.
         findViewById(R.id.refresh_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                // Plays a button sound when the refresh button is clicked.
+                buttonSound.start();
 
                 // Sets the flag to true to be addressed later on.
                 pageRefresh = true;
