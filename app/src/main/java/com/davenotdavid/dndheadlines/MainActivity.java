@@ -13,6 +13,8 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.androidquery.AQuery;
 
@@ -72,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     // Boolean flag used for indicating whether the refresh button was pressed or not.
     private boolean pageRefresh;
 
+    // CoordinatorLayout field used for UI purposes such as displaying a Snackbar message.
+    private CoordinatorLayout mCoordLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +112,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
      * Initialization/instantiation method for UI.
      */
     private void init() {
+
+        // CoordinatorLayout initialization of MainActivity's layout.
+        mCoordLayout = (CoordinatorLayout) findViewById(R.id.activity_main);
 
         // Instantiates the following to cache images with a URL.
         mAQuery = new AQuery(this);
@@ -152,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
                 // Initially parses the article's URL to preview it to the user via an implicit
-                // intent. Otherwise, displays a Toast message informing the user that the URL
+                // intent. Otherwise, displays a Snackbar message informing the user that the URL
                 // doesn't exist.
                 String articleUrl = mArticleAdapter.getItem(position).getUrl();
                 if (!articleUrl.equals("null")) {
@@ -160,8 +167,8 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, articlePreviewUrl);
                     startActivity(browserIntent);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Sorry! There's no preview for this" +
-                            " article.", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(mCoordLayout, "There's no preview for this article",
+                            Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                 }
             }
         });
@@ -234,15 +241,15 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         } else {
             //Log.d(LOG_TAG, "runLoaders(): Can't connect to network");
 
-            // Displays the following Toast message, and clears the previous article data should
-            // the user lose network connection mid-session.
-            if (pageRefresh) {
-                Toast.makeText(this, "No network connection", Toast.LENGTH_SHORT).show();
-                mArticleAdapter.clear();
-            }
+            // Displays the following Snackbar message.
+            Snackbar.make(mCoordLayout, "No internet connection", Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+
+            // Clears the previous article data should the user lose network connection mid-session.
+            if (pageRefresh) mArticleAdapter.clear();
 
             // Updates the empty state view with a no-connection-error message.
-            mEmptyStateTextView.setText(R.string.no_network_connection);
+            mEmptyStateTextView.setText(R.string.no_internet_connection);
         }
     }
 
@@ -332,8 +339,11 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 backdropImg.setImageResource(R.drawable.national_geo_logo);
             }
 
-            // Displays the following Toast message when the page is refreshed.
-            if (pageRefresh) Toast.makeText(this, "Page refreshed", Toast.LENGTH_SHORT).show();
+            // Displays the following Snackbar message when the page is refreshed.
+            if (pageRefresh) {
+                Snackbar.make(mCoordLayout, "Page refreshed", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();
+            }
         }
 
         // Sets the ListView visible, particularly for page-refreshing purposes.
