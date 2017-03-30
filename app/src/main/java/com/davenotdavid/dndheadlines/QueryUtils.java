@@ -39,7 +39,7 @@ public class QueryUtils {
         try {
             jsonResponse = makeHttpRequest(url);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+            //Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
 
         // Extracts relevant fields from the JSON response and creates a list of Articles to return.
@@ -54,7 +54,7 @@ public class QueryUtils {
         try {
             url = new URL(stringUrl);
         } catch (MalformedURLException e) {
-            Log.e(LOG_TAG, "Problem building the URL ", e);
+            //Log.e(LOG_TAG, "Problem building the URL ", e);
         }
         return url;
     }
@@ -85,10 +85,10 @@ public class QueryUtils {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } else {
-                Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
+                //Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the article JSON results.", e);
+            //Log.e(LOG_TAG, "Problem retrieving the article JSON results.", e);
         } finally {
 
             // Disconnects/closes the following to extract resources.
@@ -188,7 +188,7 @@ public class QueryUtils {
             }
 
         } catch (JSONException e) {
-            Log.e(LOG_TAG, "Problem parsing the article JSON results", e);
+            //Log.e(LOG_TAG, "Problem parsing the article JSON results", e);
         }
 
         // Return the list of articles.

@@ -31,14 +31,14 @@ public class ArticleLoader extends AsyncTaskLoader<List<Article>> {
 
     @Override
     protected void onStartLoading() {
-        Log.d(LOG_TAG, "onStartLoading()");
+        //Log.d(LOG_TAG, "onStartLoading()");
 
         forceLoad();
     }
 
     @Override
     public List<Article> loadInBackground() {
-        Log.d(LOG_TAG, "loadInBackground()");
+        //Log.d(LOG_TAG, "loadInBackground()");
 
         if (mRequestUrl == null) return null;
 

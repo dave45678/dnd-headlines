@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 // Increments the loader ID so new data could be fetched for the current news
                 // source.
                 articleLoaderID++;
-                Log.d(LOG_TAG, String.valueOf(articleLoaderID));
+                //Log.d(LOG_TAG, String.valueOf(articleLoaderID));
 
                 // Reruns the loaders.
                 runLoaders();
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
      * Runs loaders to fetch data via an HTTP request URL only if the user's device has connection.
      */
     private void runLoaders() {
-        Log.d(LOG_TAG, "runLoaders()");
+        //Log.d(LOG_TAG, "runLoaders()");
 
         // Retrieves a reference to the LoaderManager in order to interact with loaders.
         LoaderManager loaderManager = getLoaderManager();
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         // Initializes and runs loaders should there be network connection. Otherwise, displays UI
         // related to an empty state.
         if (networkInfo != null && networkInfo.isConnected()) {
-            Log.d(LOG_TAG, "runLoaders(): Connected to network");
+            //Log.d(LOG_TAG, "runLoaders(): Connected to network");
 
             // Displays the ProgressBar only if the user has network connection.
             mProgressBar.setVisibility(View.VISIBLE);
@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             // refresh-page UI.
             loaderManager.initLoader(articleLoaderID, null, this);
         } else {
-            Log.d(LOG_TAG, "runLoaders(): Can't connect to network");
+            //Log.d(LOG_TAG, "runLoaders(): Can't connect to network");
 
             // Displays the following Toast message, and clears the previous article data should
             // the user lose network connection mid-session.
@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
     @Override
     public Loader<List<Article>> onCreateLoader(int i, Bundle bundle) {
-        Log.d(LOG_TAG, "onCreateLoader()");
+        //Log.d(LOG_TAG, "onCreateLoader()");
 
         // Preferences instantiation used to retrieve the user's stored data (news source
         // preference in this case).
@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         // accordingly should it not be null nor empty.
         ImageView backdropImg = (ImageView) findViewById(R.id.backdrop);
         if (articles != null && !articles.isEmpty()) {
-            Log.d(LOG_TAG, "onLoadFinished(): Adding articles and rendering backdrop images");
+            //Log.d(LOG_TAG, "onLoadFinished(): Adding articles and rendering backdrop images");
 
             mArticleAdapter.addAll(articles);
 
@@ -348,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         // Hides the progress bar after the data-fetching process is complete.
         mProgressBar.setVisibility(View.INVISIBLE);
 
-        Log.d(LOG_TAG, "onLoadFinished");
+        //Log.d(LOG_TAG, "onLoadFinished");
     }
 
     /**
@@ -358,7 +358,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
      */
     @Override
     public void onLoaderReset(Loader<List<Article>> loader) {
-        Log.d(LOG_TAG, "onLoaderReset()");
+        //Log.d(LOG_TAG, "onLoaderReset()");
 
         // Clears out the existing data since the loader resetted.
         mArticleAdapter.clear();
