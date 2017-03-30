@@ -98,17 +98,21 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
                     formatter.parseMillis(formatUTCDateTime(articlePubDateTime));
 
             // Uses one of DateUtils' static methods to compare how long ago the article was
-            // published (e.g. 37min ago, 5hours ago, and etc.).
+            // published (e.g. 37 minutes ago, 5 hours ago, and etc.).
             CharSequence relativeTime = DateUtils.getRelativeTimeSpanString(
                     millisecondsSinceUnixEpoch,
                     System.currentTimeMillis(),
                     MINUTE_IN_MILLIS); // Minimum time to be displayed (secs would constitute as "0min ago")
 
             // Initially converts relativeTime to a String to possibly set the following TextView
-            // as "just now!". Otherwise, sets the publish time as is.
+            // as "just now!". Or, the TextView will be hidden if the String's first char starts
+            // with a letter such as "In 5 min" or "Jan 1" which sometimes appear due to a bug.
+            // Otherwise, sets the publish time as is.
             String relativeTimeString = relativeTime.toString();
             if (relativeTimeString.equals("0 minutes ago")) {
                 holder.publishTimeAgo.setText(R.string.just_now_text);
+            } else if (Character.isLetter(relativeTimeString.charAt(0))) {
+                holder.publishTimeAgo.setVisibility(View.INVISIBLE);
             } else {
                 holder.publishTimeAgo.setText(relativeTimeString);
             }
