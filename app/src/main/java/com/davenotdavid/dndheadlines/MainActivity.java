@@ -338,19 +338,18 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             } else {
                 backdropImg.setImageResource(R.drawable.national_geo_logo);
             }
-
-            // Displays the following Snackbar message when the page is refreshed.
-            if (pageRefresh) {
-                Snackbar.make(mCoordLayout, "Page refreshed", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
-            }
         }
 
         // Sets the ListView visible, particularly for page-refreshing purposes.
         mArticleListView.setVisibility(View.VISIBLE);
 
-        // Sets the flag for page refreshing back to false.
-        pageRefresh = false;
+        // Displays the following Snackbar message when the page is refreshed, and then sets the
+        // flag back to false.
+        if (pageRefresh) {
+            Snackbar.make(mCoordLayout, "Page refreshed", Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+            pageRefresh = false;
+        }
 
         // Updates the empty state view with a no-results-found message.
         mEmptyStateTextView.setText(R.string.no_results_found);
