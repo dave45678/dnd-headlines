@@ -89,8 +89,8 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         String articlePubDateTime = currentArticle.getPublishedAt();
         if (!articlePubDateTime.equals("null")) { // JSON apparently returns a null string
 
-            // DateTimeFormatter initialized that's used to retrieve the UTC (4 hours faster than
-            // EST) time in milliseconds of when the article was published.
+            // DateTimeFormatter initialized that's used to retrieve the UTC (e.g. 4 hours faster
+            // than EST) time in milliseconds of when the article was published.
             DateTimeFormatter formatter = DateTimeFormat
                     .forPattern("yyyy-MM-dd HH:mm:ss")
                     .withZoneUTC();
@@ -105,13 +105,13 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
                     MINUTE_IN_MILLIS); // Minimum time to be displayed (secs would constitute as "0min ago")
 
             // Initially converts relativeTime to a String to possibly set the following TextView
-            // as "just now!". Or, the TextView will be hidden if the String's first char starts
-            // with a letter such as "In 5 min" or "Jan 1" which sometimes appear due to a bug.
-            // Otherwise, sets the publish time as is.
+            // as "just now!". Or, the TextView will be hidden if the String is something like
+            // "In 5 min" which sometimes appears due to a back-end bug. Otherwise, sets the
+            // publish time as is.
             String relativeTimeString = relativeTime.toString();
             if (relativeTimeString.equals("0 minutes ago")) {
                 holder.publishTimeAgo.setText(R.string.just_now_text);
-            } else if (Character.isLetter(relativeTimeString.charAt(0))) {
+            } else if (relativeTimeString.charAt(0) == 'I' && relativeTimeString.charAt(1) == 'n') {
                 holder.publishTimeAgo.setVisibility(View.INVISIBLE);
             } else {
                 holder.publishTimeAgo.setText(relativeTimeString);
