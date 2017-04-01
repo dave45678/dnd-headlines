@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, articlePreviewUrl);
                     startActivity(browserIntent);
                 } else {
-                    Snackbar.make(mCoordLayout, "There's no preview for this article",
+                    Snackbar.make(mCoordLayout, getString(R.string.snackbar_no_article_preview),
                             Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                 }
             }
@@ -242,8 +242,8 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             //Log.d(LOG_TAG, "runLoaders(): Can't connect to network");
 
             // Displays the following Snackbar message.
-            Snackbar.make(mCoordLayout, "No internet connection", Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show();
+            Snackbar.make(mCoordLayout, getString(R.string.snackbar_no_internet_connection),
+                    Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
             // Clears the previous article data should the user lose network connection mid-session.
             if (pageRefresh) mArticleAdapter.clear();
@@ -346,8 +346,8 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         // Displays the following Snackbar message when the page is refreshed, and then sets the
         // flag back to false.
         if (pageRefresh) {
-            Snackbar.make(mCoordLayout, "Page refreshed", Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show();
+            Snackbar.make(mCoordLayout, getString(R.string.snackbar_page_refreshed),
+                    Snackbar.LENGTH_SHORT).setAction("Action", null).show();
             pageRefresh = false;
         }
 
