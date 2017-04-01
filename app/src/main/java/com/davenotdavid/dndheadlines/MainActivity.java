@@ -287,35 +287,70 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         // title.
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        if (newsSource.equals(getString(R.string.settings_news_sources_source1_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source1_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_source2_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source2_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_source3_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source3_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_source4_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source4_label));
-        } else if (newsSource.equals(getString
-                (R.string.settings_news_sources_source_default_value))) {
+        if (newsSource.equals(getString(R.string.settings_news_sources_abc_news_au_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_abc_news_au_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_al_jazeera_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_al_jazeera_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_ars_technica_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_ars_technica_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_assoc_press_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_assoc_press_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_bbc_news_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_bbc_news_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_bloomberg_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_bloomberg_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_breitbart_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_breitbart_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_bus_insider_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_bus_insider_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_daily_mail_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_daily_mail_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_engadget_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_engadget_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_ent_weekly_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_ent_weekly_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_fin_times_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_fin_times_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_fortune_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_fortune_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_fourfourtwo_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_fourfourtwo_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_fox_sports_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_fox_sports_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_source_default_value))) {
             collapsingToolbar.setTitle(getString(R.string.google_news));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_source5_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source5_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_source6_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source6_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_source7_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source7_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_source8_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source8_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_source9_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source9_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_source10_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source10_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_source11_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source11_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_source12_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source12_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_source13_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source13_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_ign_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_ign_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_mashable_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_mashable_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_metro_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_metro_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_mtv_news_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_mtv_news_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_nat_geographic_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_nat_geographic_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_ny_magazine_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_ny_magazine_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_nfl_news_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_nfl_news_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_reuters_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_reuters_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_talksport_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_talksport_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_techcrunch_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_techcrunch_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_techradar_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_techradar_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_guardian_uk_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_guardian_uk_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_the_hindu_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_the_hindu_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_the_lad_bible_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_the_lad_bible_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_the_nyt_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_the_nyt_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_wsj_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_wsj_label));
         }
 
         // Adds the list of Articles to the adapter's dataset, and renders backdrop images

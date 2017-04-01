@@ -21,32 +21,68 @@
     <string name="settings_news_sources_default" translatable="false">@string/settings_news_sources_source_default_value</string>
 
     <!-- Labels and values (query parameters) for the following news sources -->
-    <string name="settings_news_sources_source1_label">Associated Press</string>
-    <string name="settings_news_sources_source1_value" translatable="false">associated-press</string>
-    <string name="settings_news_sources_source2_label">Bloomberg</string>
-    <string name="settings_news_sources_source2_value" translatable="false">bloomberg</string>
-    <string name="settings_news_sources_source3_label">Breitbart News</string>
-    <string name="settings_news_sources_source3_value" translatable="false">breitbart-news</string>
-    <string name="settings_news_sources_source4_label">Business Insider</string>
-    <string name="settings_news_sources_source4_value" translatable="false">business-insider</string>
+    <string name="settings_news_sources_abc_news_au_label">ABC News (AU)</string>
+    <string name="settings_news_sources_abc_news_au_value" translatable="false">abc-news-au</string>
+    <string name="settings_news_sources_al_jazeera_label">Al Jazeera (English)</string>
+    <string name="settings_news_sources_al_jazeera_value" translatable="false">al-jazeera-english</string>
+    <string name="settings_news_sources_ars_technica_label">Ars Technica</string>
+    <string name="settings_news_sources_ars_technica_value" translatable="false">ars-technica</string>
+    <string name="settings_news_sources_assoc_press_label">Associated Press</string>
+    <string name="settings_news_sources_assoc_press_value" translatable="false">associated-press</string>
+    <string name="settings_news_sources_bbc_news_label">BBC News</string>
+    <string name="settings_news_sources_bbc_news_value" translatable="false">bbc-news</string>
+    <string name="settings_news_sources_bloomberg_label">Bloomberg</string>
+    <string name="settings_news_sources_bloomberg_value" translatable="false">bloomberg</string>
+    <string name="settings_news_sources_breitbart_label">Breitbart News</string>
+    <string name="settings_news_sources_breitbart_value" translatable="false">breitbart-news</string>
+    <string name="settings_news_sources_bus_insider_label">Business Insider</string>
+    <string name="settings_news_sources_bus_insider_value" translatable="false">business-insider</string>
+    <string name="settings_news_sources_daily_mail_label">Daily Mail</string>
+    <string name="settings_news_sources_daily_mail_value" translatable="false">daily-mail</string>
+    <string name="settings_news_sources_engadget_label">Engadget</string>
+    <string name="settings_news_sources_engadget_value" translatable="false">engadget</string>
+    <string name="settings_news_sources_ent_weekly_label">Entertainment Weekly</string>
+    <string name="settings_news_sources_ent_weekly_value" translatable="false">entertainment-weekly</string>
+    <string name="settings_news_sources_fin_times_label">Financial Times</string>
+    <string name="settings_news_sources_fin_times_value" translatable="false">financial-times</string>
+    <string name="settings_news_sources_fortune_label">Fortune</string>
+    <string name="settings_news_sources_fortune_value" translatable="false">fortune</string>
+    <string name="settings_news_sources_fourfourtwo_label">FourFourTwo</string>
+    <string name="settings_news_sources_fourfourtwo_value" translatable="false">four-four-two</string>
+    <string name="settings_news_sources_fox_sports_label">Fox Sports</string>
+    <string name="settings_news_sources_fox_sports_value" translatable="false">fox-sports</string>
     <string name="settings_news_sources_source_default_label">Google News (default)</string>
     <string name="settings_news_sources_source_default_value" translatable="false">google-news</string>
-    <string name="settings_news_sources_source5_label">Fortune</string>
-    <string name="settings_news_sources_source5_value" translatable="false">fortune</string>
-    <string name="settings_news_sources_source6_label">Fox Sports</string>
-    <string name="settings_news_sources_source6_value" translatable="false">fox-sports</string>
-    <string name="settings_news_sources_source7_label">IGN</string>
-    <string name="settings_news_sources_source7_value" translatable="false">ign</string>
-    <string name="settings_news_sources_source8_label">MTV News</string>
-    <string name="settings_news_sources_source8_value" translatable="false">mtv-news</string>
-    <string name="settings_news_sources_source9_label">National Geographic</string>
-    <string name="settings_news_sources_source9_value" translatable="false">national-geographic</string>
-    <string name="settings_news_sources_source10_label">NFL News</string>
-    <string name="settings_news_sources_source10_value" translatable="false">nfl-news</string>
-    <string name="settings_news_sources_source11_label">Reuters</string>
-    <string name="settings_news_sources_source11_value" translatable="false">reuters</string>
-    <string name="settings_news_sources_source12_label">The Guardian (UK)</string>
-    <string name="settings_news_sources_source12_value" translatable="false">the-guardian-uk</string>
-    <string name="settings_news_sources_source13_label">The Wall Street Journal</string>
-    <string name="settings_news_sources_source13_value" translatable="false">the-wall-street-journal</string>
+    <string name="settings_news_sources_ign_label">IGN</string>
+    <string name="settings_news_sources_ign_value" translatable="false">ign</string>
+    <string name="settings_news_sources_mashable_label">Mashable</string>
+    <string name="settings_news_sources_mashable_value" translatable="false">mashable</string>
+    <string name="settings_news_sources_metro_label">Metro</string>
+    <string name="settings_news_sources_metro_value" translatable="false">metro</string>
+    <string name="settings_news_sources_mtv_news_label">MTV News</string>
+    <string name="settings_news_sources_mtv_news_value" translatable="false">mtv-news</string>
+    <string name="settings_news_sources_nat_geographic_label">National Geographic</string>
+    <string name="settings_news_sources_nat_geographic_value" translatable="false">national-geographic</string>
+    <string name="settings_news_sources_ny_magazine_label">New York Magazine</string>
+    <string name="settings_news_sources_ny_magazine_value" translatable="false">new-york-magazine</string>
+    <string name="settings_news_sources_nfl_news_label">NFL News</string>
+    <string name="settings_news_sources_nfl_news_value" translatable="false">nfl-news</string>
+    <string name="settings_news_sources_reuters_label">Reuters</string>
+    <string name="settings_news_sources_reuters_value" translatable="false">reuters</string>
+    <string name="settings_news_sources_talksport_label">TalkSport</string>
+    <string name="settings_news_sources_talksport_value" translatable="false">talksport</string>
+    <string name="settings_news_sources_techcrunch_label">TechCrunch</string>
+    <string name="settings_news_sources_techcrunch_value" translatable="false">techcrunch</string>
+    <string name="settings_news_sources_techradar_label">TechRadar</string>
+    <string name="settings_news_sources_techradar_value" translatable="false">techradar</string>
+    <string name="settings_news_sources_guardian_uk_label">The Guardian (UK)</string>
+    <string name="settings_news_sources_guardian_uk_value" translatable="false">the-guardian-uk</string>
+    <string name="settings_news_sources_the_hindu_label">The Hindu</string>
+    <string name="settings_news_sources_the_hindu_value" translatable="false">the-hindu</string>
+    <string name="settings_news_sources_the_lad_bible_label">The Lad Bible</string>
+    <string name="settings_news_sources_the_lad_bible_value" translatable="false">the-lad-bible</string>
+    <string name="settings_news_sources_the_nyt_label">The New York Times</string>
+    <string name="settings_news_sources_the_nyt_value" translatable="false">the-new-york-times</string>
+    <string name="settings_news_sources_wsj_label">The Wall Street Journal</string>
+    <string name="settings_news_sources_wsj_value" translatable="false">the-wall-street-journal</string>
 </resources>
