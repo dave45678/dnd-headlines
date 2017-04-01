@@ -2,47 +2,47 @@
 <resources>
 
     <!-- Default screen padding/margins, per the Android Design guidelines. -->
-    <dimen name="activity_padding">16dp</dimen>
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_padding_default">16dp</dimen>
+    <dimen name="activity_horizontal_margin_default">16dp</dimen>
+    <dimen name="activity_vertical_margin_default">16dp</dimen>
 
     <!-- Custom screen padding/margins. -->
-    <dimen name="activity_padding2">8dp</dimen>
-    <dimen name="activity_horizontal_margin2">8dp</dimen>
-    <dimen name="activity_vertical_margin2">8dp</dimen>
-    <dimen name="activity_padding3">4dp</dimen>
-    <dimen name="activity_horizontal_margin3">4dp</dimen>
-    <dimen name="activity_vertical_margin3">4dp</dimen>
-    <dimen name="activity_padding4">24dp</dimen>
-    <dimen name="activity_horizontal_margin4">24dp</dimen>
-    <dimen name="activity_vertical_margin4">24dp</dimen>
-    <dimen name="activity_padding5">32dp</dimen>
-    <dimen name="activity_horizontal_margin5">32dp</dimen>
-    <dimen name="activity_vertical_margin5">32dp</dimen>
-    <dimen name="activity_padding6">40dp</dimen>
-    <dimen name="activity_horizontal_margin6">40dp</dimen>
-    <dimen name="activity_vertical_margin6">40dp</dimen>
-    <dimen name="activity_padding7">48dp</dimen>
-    <dimen name="activity_horizontal_margin7">48dp</dimen>
-    <dimen name="activity_vertical_margin7">48dp</dimen>
-    <dimen name="activity_padding8">56dp</dimen>
-    <dimen name="activity_horizontal_margin8">56dp</dimen>
-    <dimen name="activity_vertical_margin8">56dp</dimen>
-    <dimen name="activity_padding9">64dp</dimen>
-    <dimen name="activity_horizontal_margin9">64dp</dimen>
-    <dimen name="activity_vertical_margin9">64dp</dimen>
-    <dimen name="activity_padding10">72dp</dimen>
-    <dimen name="activity_horizontal_margin10">72dp</dimen>
-    <dimen name="activity_vertical_margin10">72dp</dimen>
-    <dimen name="activity_padding11">80dp</dimen>
-    <dimen name="activity_horizontal_margin11">80dp</dimen>
-    <dimen name="activity_vertical_margin11">80dp</dimen>
-    <dimen name="activity_padding12">88dp</dimen>
-    <dimen name="activity_horizontal_margin12">88dp</dimen>
-    <dimen name="activity_vertical_margin12">88dp</dimen>
-    <dimen name="activity_padding13">96dp</dimen>
-    <dimen name="activity_horizontal_margin13">96dp</dimen>
-    <dimen name="activity_vertical_margin13">96dp</dimen>
+    <dimen name="activity_padding_8">8dp</dimen>
+    <dimen name="activity_horizontal_margin_8">8dp</dimen>
+    <dimen name="activity_vertical_margin_8">8dp</dimen>
+    <dimen name="activity_padding_4">4dp</dimen>
+    <dimen name="activity_horizontal_margin_4">4dp</dimen>
+    <dimen name="activity_vertical_margin_4">4dp</dimen>
+    <dimen name="activity_padding_24">24dp</dimen>
+    <dimen name="activity_horizontal_margin_24">24dp</dimen>
+    <dimen name="activity_vertical_margin_24">24dp</dimen>
+    <dimen name="activity_padding_32">32dp</dimen>
+    <dimen name="activity_horizontal_margin_32">32dp</dimen>
+    <dimen name="activity_vertical_margin_32">32dp</dimen>
+    <dimen name="activity_padding_40">40dp</dimen>
+    <dimen name="activity_horizontal_margin_40">40dp</dimen>
+    <dimen name="activity_vertical_margin_40">40dp</dimen>
+    <dimen name="activity_padding_48">48dp</dimen>
+    <dimen name="activity_horizontal_margin_48">48dp</dimen>
+    <dimen name="activity_vertical_margin_48">48dp</dimen>
+    <dimen name="activity_padding_56">56dp</dimen>
+    <dimen name="activity_horizontal_margin_56">56dp</dimen>
+    <dimen name="activity_vertical_margin_56">56dp</dimen>
+    <dimen name="activity_padding_64">64dp</dimen>
+    <dimen name="activity_horizontal_margin_64">64dp</dimen>
+    <dimen name="activity_vertical_margin_64">64dp</dimen>
+    <dimen name="activity_padding_72">72dp</dimen>
+    <dimen name="activity_horizontal_margin_72">72dp</dimen>
+    <dimen name="activity_vertical_margin_72">72dp</dimen>
+    <dimen name="activity_padding_80">80dp</dimen>
+    <dimen name="activity_horizontal_margin_80">80dp</dimen>
+    <dimen name="activity_vertical_margin_80">80dp</dimen>
+    <dimen name="activity_padding_88">88dp</dimen>
+    <dimen name="activity_horizontal_margin_88">88dp</dimen>
+    <dimen name="activity_vertical_margin_88">88dp</dimen>
+    <dimen name="activity_padding_96">96dp</dimen>
+    <dimen name="activity_horizontal_margin_96">96dp</dimen>
+    <dimen name="activity_vertical_margin_96">96dp</dimen>
 
     <!-- Custom heights for the app bar layout. -->
     <dimen name="detail_backdrop_height_small">176dp</dimen>
