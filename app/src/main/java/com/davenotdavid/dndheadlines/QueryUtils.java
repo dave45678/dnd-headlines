@@ -149,34 +149,35 @@ public class QueryUtils {
                 // Retrieves a single article within each iteration.
                 JSONObject currentArticle = articleArray.getJSONObject(i);
 
-                // Extracts values for the following keys that are assisted with try/catch blocks.
-                // Only the top 10 articles are retrieved from the server, so it's essential that
-                // each of these gets added to the list despite some of its attributes being null.
+                // Extracts values for the following keys. Only the top 10 (at most) articles are
+                // retrieved from the server, so it's essential that each of these gets added to
+                // the list despite some of its values being "null" - yes, a String value of null
+                // is really returned from the News API's JSON response.
                 String title;
-                try {
+                if (currentArticle.has("title")) { // Checks anyways should News API change how they return empty key-values
                     title = currentArticle.getString("title");
-                } catch (JSONException e) {
-                    title = "null"; // Returns a null string otherwise since the server returns these values anyways
+                } else {
+                    title = "null"; // Otherwise, returns a String value of null to match News API's standards
                 }
 
                 String url;
-                try {
+                if (currentArticle.has("url")) {
                     url = currentArticle.getString("url");
-                } catch (JSONException e) {
+                } else {
                     url = "null";
                 }
 
                 String urlToImage;
-                try {
+                if (currentArticle.has("urlToImage")) {
                     urlToImage = currentArticle.getString("urlToImage");
-                } catch (JSONException e) {
+                } else {
                     urlToImage = "null";
                 }
 
                 String publishedAt;
-                try {
+                if (currentArticle.has("publishedAt")) {
                     publishedAt = currentArticle.getString("publishedAt");
-                } catch (JSONException e) {
+                } else {
                     publishedAt = "null";
                 }
 

@@ -77,7 +77,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         String rankText = String.valueOf(position + 1) + ". ";
         StringBuilder titleSb = new StringBuilder();
         titleSb.append(rankText);
-        if (!currentArticle.getTitle().equals("null")) { // JSON apparently returns a null string
+        if (!currentArticle.getTitle().equals("null")) { // Yes, News API actually returns a String value of null
             titleSb.append(currentArticle.getTitle());
         } else {
             titleSb.append("<VOID>");
@@ -87,7 +87,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         // Initializes the following reference variable to render a view of how long ago the
         // article was published as of now (user's locale time). Otherwise, hides the view.
         String articlePubDateTime = currentArticle.getPublishedAt();
-        if (!articlePubDateTime.equals("null")) { // JSON apparently returns a null string
+        if (!articlePubDateTime.equals("null")) { // Yes, News API actually returns a String value of null
 
             // DateTimeFormatter initialized that's used to retrieve the UTC (e.g. 4 hours faster
             // than EST) time in milliseconds of when the article was published.

@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 // intent. Otherwise, displays a Snackbar message informing the user that the URL
                 // doesn't exist.
                 String articleUrl = mArticleAdapter.getItem(position).getUrl();
-                if (!articleUrl.equals("null")) {
+                if (!articleUrl.equals("null")) { // // Yes, News API actually returns a String value of null
                     Uri articlePreviewUrl = Uri.parse(articleUrl);
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, articlePreviewUrl);
                     startActivity(browserIntent);
