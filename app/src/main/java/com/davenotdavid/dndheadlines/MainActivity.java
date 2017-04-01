@@ -314,6 +314,8 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source11_label));
         } else if (newsSource.equals(getString(R.string.settings_news_sources_source12_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source12_label));
+        } else if (newsSource.equals(getString(R.string.settings_news_sources_source13_value))) {
+            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_source13_label));
         }
 
         // Adds the list of Articles to the adapter's dataset, and renders backdrop images

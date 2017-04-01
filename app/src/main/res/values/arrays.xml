@@ -14,6 +14,7 @@
         <item>@string/settings_news_sources_source10_label</item>
         <item>@string/settings_news_sources_source11_label</item>
         <item>@string/settings_news_sources_source12_label</item>
+        <item>@string/settings_news_sources_source13_label</item>
     </string-array>
 
     <string-array name="settings_news_sources_values">
@@ -30,5 +31,6 @@
         <item>@string/settings_news_sources_source10_value</item>
         <item>@string/settings_news_sources_source11_value</item>
         <item>@string/settings_news_sources_source12_value</item>
+        <item>@string/settings_news_sources_source13_value</item>
     </string-array>
 </resources>

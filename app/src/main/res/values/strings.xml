@@ -45,6 +45,8 @@
     <string name="settings_news_sources_source10_value" translatable="false">nfl-news</string>
     <string name="settings_news_sources_source11_label">Reuters</string>
     <string name="settings_news_sources_source11_value" translatable="false">reuters</string>
-    <string name="settings_news_sources_source12_label">The Wall Street Journal</string>
-    <string name="settings_news_sources_source12_value" translatable="false">the-wall-street-journal</string>
+    <string name="settings_news_sources_source12_label">The Guardian (UK)</string>
+    <string name="settings_news_sources_source12_value" translatable="false">the-guardian-uk</string>
+    <string name="settings_news_sources_source13_label">The Wall Street Journal</string>
+    <string name="settings_news_sources_source13_value" translatable="false">the-wall-street-journal</string>
 </resources>
