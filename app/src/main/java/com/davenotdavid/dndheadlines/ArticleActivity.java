@@ -20,7 +20,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,10 +39,10 @@ import java.util.List;
  * displays the top news/headlines based on a certain news source (either default or user's stored
  * preference).
  */
-public class MainActivity extends AppCompatActivity implements LoaderCallbacks<List<Article>> {
+public class ArticleActivity extends AppCompatActivity implements LoaderCallbacks<List<Article>> {
 
     // Log tag constant.
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String LOG_TAG = ArticleActivity.class.getSimpleName();
 
     // ListView initialization for the article list.
     private ListView mArticleListView;
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
      */
     private void init() {
 
-        // CoordinatorLayout initialization of MainActivity's layout.
+        // CoordinatorLayout initialization of ArticleActivity's layout.
         mCoordLayout = (CoordinatorLayout) findViewById(R.id.activity_main);
 
         // Instantiates the following to cache images with a URL.
@@ -441,7 +440,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                     public void onClick(DialogInterface arg0, int arg1) {
 
                         // Implements the back button's function by exiting the app.
-                        MainActivity.super.onBackPressed();
+                        ArticleActivity.super.onBackPressed();
                     }
                 }).create().show();
     }

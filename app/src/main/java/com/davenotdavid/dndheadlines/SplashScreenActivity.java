@@ -13,7 +13,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent mainActIntent = new Intent(this, MainActivity.class);
+        Intent mainActIntent = new Intent(this, ArticleActivity.class);
         startActivity(mainActIntent);
         finish();
     }

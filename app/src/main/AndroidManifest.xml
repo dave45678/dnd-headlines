@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".ArticleActivity"
             android:theme="@style/AppThemeNoActionBar">
         </activity>
         <activity
@@ -30,7 +30,7 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.davenotdavid.dndheadlines.MainActivity"/>
+                android:value="com.davenotdavid.dndheadlines.ArticleActivity"/>
         </activity>
     </application>
 

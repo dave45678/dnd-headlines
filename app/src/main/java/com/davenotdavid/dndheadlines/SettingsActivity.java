@@ -62,11 +62,11 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     /**
-     * Starts a new MainActivity state via an explicit intent.
+     * Starts a new ArticleActivity state via an explicit intent.
      */
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ArticleActivity.class);
         startActivity(intent);
         finish();
     }
