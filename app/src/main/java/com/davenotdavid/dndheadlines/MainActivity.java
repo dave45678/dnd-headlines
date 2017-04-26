@@ -138,7 +138,15 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             public void onClick(View view) {
                 Uri newsApiAttUrl = Uri.parse("https://newsapi.org/");
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, newsApiAttUrl);
-                startActivity(browserIntent);
+
+                // Verifies that the user's device has the required "app" for running the implicit
+                // intent. Otherwise, displays a Snackbar message that indicates an error.
+                if (browserIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(browserIntent);
+                } else {
+                    Snackbar.make(mCoordLayout, getString(R.string.snackbar_preview_error),
+                            Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                }
             }
         });
 
@@ -162,10 +170,19 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 // intent. Otherwise, displays a Snackbar message informing the user that the URL
                 // doesn't exist.
                 String articleUrl = mArticleAdapter.getItem(position).getUrl();
-                if (!articleUrl.equals("null")) { // // Yes, News API actually returns a String value of null
+                if (!articleUrl.equals("null")) { // Yes, News API actually returns a String value of null
                     Uri articlePreviewUrl = Uri.parse(articleUrl);
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, articlePreviewUrl);
-                    startActivity(browserIntent);
+
+                    // Verifies that the user's device has the required "app" for running the
+                    // implicit intent. Otherwise, displays a Snackbar message that indicates an
+                    // error.
+                    if (browserIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(browserIntent);
+                    } else {
+                        Snackbar.make(mCoordLayout, getString(R.string.snackbar_preview_error),
+                                Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                    }
                 } else {
                     Snackbar.make(mCoordLayout, getString(R.string.snackbar_no_article_preview),
                             Snackbar.LENGTH_SHORT).setAction("Action", null).show();

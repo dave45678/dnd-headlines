@@ -5,6 +5,7 @@
     <string name="void_title">VOID</string>
     <string name="just_now_text">just now!</string>
     <string name="google_news">Google News</string>
+    <string name="snackbar_preview_error">Error opening up article</string>
     <string name="snackbar_no_article_preview">There\'s no preview for this article</string>
     <string name="snackbar_no_internet_connection">No internet connection</string>
     <string name="snackbar_page_refreshed">Page refreshed</string>
