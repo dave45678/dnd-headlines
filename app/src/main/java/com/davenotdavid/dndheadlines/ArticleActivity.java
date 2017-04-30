@@ -296,6 +296,9 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
     @Override
     public void onLoadFinished(Loader<List<Article>> loader, List<Article> articles) {
 
+        // Hides the progress bar after the data-fetching process is complete.
+        mProgressBar.setVisibility(View.INVISIBLE);
+
         // Clears the adapter of previous article data.
         mArticleAdapter.clear();
 
@@ -406,9 +409,6 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
 
         // Updates the empty state view with a no-results-found message.
         mEmptyStateTextView.setText(R.string.no_results_found);
-
-        // Hides the progress bar after the data-fetching process is complete.
-        mProgressBar.setVisibility(View.INVISIBLE);
 
         //Log.d(LOG_TAG, "onLoadFinished");
     }
