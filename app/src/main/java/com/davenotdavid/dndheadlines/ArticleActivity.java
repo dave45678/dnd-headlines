@@ -21,6 +21,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -266,6 +267,19 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
         }
     }
 
+    /**
+     * Displays the following Snackbar message when the page is refreshed, and then sets the flag
+     * back to false.
+     */
+    private void displayRefreshSnackbar() {
+        if (mPageRefresh) {
+            Snackbar.make(mCoordLayout, getString(R.string.snackbar_page_refreshed),
+                    Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+
+            mPageRefresh = false;
+        }
+    }
+
     @Override
     public Loader<List<Article>> onCreateLoader(int loaderId, Bundle bundle) {
         //Log.d(LOG_TAG, "onCreateLoader()");
@@ -316,12 +330,24 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
 
     @Override
     public void onLoadFinished(Loader<List<Article>> loader, List<Article> articles) {
+        //Log.d(LOG_TAG, "onLoadFinished");
 
         // Hides the progress bar after the data-fetching process is complete.
         mProgressBar.setVisibility(View.INVISIBLE);
 
         // Clears the adapter of previous article data.
         mArticleAdapter.clear();
+
+        // Updates the empty state view with a no-results-found message.
+        mEmptyStateTextView.setText(R.string.no_results_found);
+
+        // Displays the refresh-Snackbar message and returns out of onLoadFinished() immediately
+        // should the article data be null.
+        if (articles == null || articles.isEmpty()) {
+            displayRefreshSnackbar();
+
+            return;
+        }
 
         // Initializes the following toolbar layout to set up the respective news source as its
         // title.
@@ -420,19 +446,9 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
         // Sets the ListView visible, particularly for page-refreshing purposes.
         mArticleListView.setVisibility(View.VISIBLE);
 
-        // Displays the following Snackbar message when the page is refreshed, and then sets the
-        // flag back to false.
-        if (mPageRefresh) {
-            Snackbar.make(mCoordLayout, getString(R.string.snackbar_page_refreshed),
-                    Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-
-            mPageRefresh = false;
-        }
-
-        // Updates the empty state view with a no-results-found message.
-        mEmptyStateTextView.setText(R.string.no_results_found);
-
-        //Log.d(LOG_TAG, "onLoadFinished");
+        // Invokes the following to display a Snackbar message after successfully refreshing the
+        // article page.
+        displayRefreshSnackbar();
     }
 
     /**
