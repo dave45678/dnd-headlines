@@ -429,8 +429,8 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
-                .setTitle("DND Headlines")
-                .setMessage("Are you sure you want to exit the app?")
+                .setTitle(R.string.app_name)
+                .setMessage(R.string.dialog_exit_msg)
                 .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 

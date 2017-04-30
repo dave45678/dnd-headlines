@@ -5,6 +5,7 @@
     <string name="void_title">VOID</string>
     <string name="just_now_text">just now!</string>
     <string name="google_news">Google News</string>
+    <string name="dialog_exit_msg">Are you sure you want to exit the app?</string>
     <string name="snackbar_preview_error">Error opening up article</string>
     <string name="snackbar_no_article_preview">There\'s no preview for this article</string>
     <string name="snackbar_no_internet_connection">No internet connection</string>
