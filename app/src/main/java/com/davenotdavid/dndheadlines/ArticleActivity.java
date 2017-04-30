@@ -266,7 +266,7 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
     }
 
     @Override
-    public Loader<List<Article>> onCreateLoader(int i, Bundle bundle) {
+    public Loader<List<Article>> onCreateLoader(int loaderId, Bundle bundle) {
         //Log.d(LOG_TAG, "onCreateLoader()");
 
         // Preferences instantiation used to retrieve the user's stored data (news source
