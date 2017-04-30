@@ -50,15 +50,15 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
     // Adapter for the list of Articles.
     private ArticleAdapter mArticleAdapter;
 
-    // Loader ID that later gets incremented for a refresh-page UI.
-    private static int articleLoaderID = 1;
+    // ID constant for the loader.
+    private static final int ARTICLE_LOADER_ID = 1;
 
     // String constant that represents the News API endpoint URL that later appends query
     // parameters.
     private static final String NEWS_ENDPOINT_URL = "https://newsapi.org/v1/articles";
 
     // Field used to retrieve the news-source parameter.
-    private static String newsSource;
+    private static String mNewsSource;
 
     // Field used for displaying a progress bar while fetching data from the HTTP server.
     private ProgressBar mProgressBar;
@@ -70,7 +70,7 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
     private AQuery mAQuery;
 
     // Boolean flag used for indicating whether the refresh button was pressed or not.
-    private boolean pageRefresh;
+    private boolean mPageRefresh;
 
     // CoordinatorLayout field used for UI purposes such as displaying a Snackbar message.
     private CoordinatorLayout mCoordLayout;
@@ -201,12 +201,7 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
                 buttonSound.start();
 
                 // Sets the flag to true to be addressed later on.
-                pageRefresh = true;
-
-                // Increments the loader ID so new data could be fetched for the current news
-                // source.
-                articleLoaderID++;
-                //Log.d(LOG_TAG, String.valueOf(articleLoaderID));
+                mPageRefresh = true;
 
                 // Reruns the loaders.
                 runLoaders();
@@ -239,8 +234,9 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
             mProgressBar.setVisibility(View.VISIBLE);
 
             // When the refresh button is pressed, the ListView and empty state TextView will
-            // temporarily be hidden for a page-refreshing UI.
-            if (pageRefresh) {
+            // temporarily be hidden, and the loader will restart for a page-refreshing UI.
+            // Otherwise, initializes the loader.
+            if (mPageRefresh) {
                 mArticleListView.setVisibility(View.INVISIBLE);
 
                 // Temporarily hides the TextView only if it's already visible. Apparently, the
@@ -249,11 +245,11 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
                 if (mEmptyStateTextView.getVisibility() == View.VISIBLE) {
                     mEmptyStateTextView.setVisibility(View.INVISIBLE);
                 }
-            }
 
-            // Passes in a loader that could either be a single loader or multiple loaders for a
-            // refresh-page UI.
-            loaderManager.initLoader(articleLoaderID, null, this);
+                loaderManager.restartLoader(ARTICLE_LOADER_ID, null, this);
+            } else {
+                loaderManager.initLoader(ARTICLE_LOADER_ID, null, this);
+            }
         } else {
             //Log.d(LOG_TAG, "runLoaders(): Can't connect to network");
 
@@ -262,7 +258,7 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
                     Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
             // Clears the previous article data should the user lose network connection mid-session.
-            if (pageRefresh) mArticleAdapter.clear();
+            if (mPageRefresh) mArticleAdapter.clear();
 
             // Updates the empty state view with a no-connection-error message.
             mEmptyStateTextView.setText(R.string.no_internet_connection);
@@ -276,7 +272,7 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
         // Preferences instantiation used to retrieve the user's stored data (news source
         // preference in this case).
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        newsSource = sharedPrefs.getString(
+        mNewsSource = sharedPrefs.getString(
                 getString(R.string.settings_news_sources_key),
                 getString(R.string.settings_news_sources_default)
         );
@@ -287,7 +283,7 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
 
         // Appends the following query parameters onto the URI. The "sortBy" parameter is defaulted
         // as "top news" for every source. Also, the user's news source preference is appended.
-        uriBuilder.appendQueryParameter("source", newsSource);
+        uriBuilder.appendQueryParameter("source", mNewsSource);
         uriBuilder.appendQueryParameter("apiKey", getString(R.string.news_api_key));
 
         return new ArticleLoader(this, uriBuilder.toString());
@@ -306,69 +302,69 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
         // title.
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        if (newsSource.equals(getString(R.string.settings_news_sources_abc_news_au_value))) {
+        if (mNewsSource.equals(getString(R.string.settings_news_sources_abc_news_au_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_abc_news_au_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_al_jazeera_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_al_jazeera_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_al_jazeera_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_ars_technica_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_ars_technica_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_ars_technica_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_assoc_press_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_assoc_press_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_assoc_press_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_bbc_news_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_bbc_news_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_bbc_news_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_bloomberg_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_bloomberg_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_bloomberg_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_breitbart_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_breitbart_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_breitbart_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_bus_insider_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_bus_insider_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_bus_insider_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_daily_mail_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_daily_mail_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_daily_mail_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_engadget_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_engadget_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_engadget_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_ent_weekly_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_ent_weekly_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_ent_weekly_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_fin_times_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_fin_times_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_fin_times_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_fortune_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_fortune_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_fortune_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_fourfourtwo_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_fourfourtwo_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_fourfourtwo_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_fox_sports_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_fox_sports_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_fox_sports_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_source_default_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_source_default_value))) {
             collapsingToolbar.setTitle(getString(R.string.google_news));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_ign_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_ign_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_ign_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_mashable_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_mashable_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_mashable_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_metro_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_metro_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_metro_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_mtv_news_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_mtv_news_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_mtv_news_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_nat_geographic_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_nat_geographic_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_nat_geographic_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_ny_magazine_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_ny_magazine_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_ny_magazine_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_nfl_news_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_nfl_news_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_nfl_news_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_reuters_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_reuters_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_reuters_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_talksport_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_talksport_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_talksport_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_techcrunch_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_techcrunch_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_techcrunch_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_techradar_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_techradar_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_techradar_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_guardian_uk_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_guardian_uk_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_guardian_uk_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_the_hindu_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_the_hindu_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_the_hindu_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_the_lad_bible_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_the_lad_bible_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_the_lad_bible_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_the_nyt_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_the_nyt_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_the_nyt_label));
-        } else if (newsSource.equals(getString(R.string.settings_news_sources_wsj_value))) {
+        } else if (mNewsSource.equals(getString(R.string.settings_news_sources_wsj_value))) {
             collapsingToolbar.setTitle(getString(R.string.settings_news_sources_wsj_label));
         }
 
@@ -383,7 +379,7 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
             // Renders the backdrop image accordingly should the news source not be National
             // Geographic (their images are too big to scale down). Otherwise, renders National
             // Geographic's logo.
-            if (!newsSource.equals("national-geographic")) {
+            if (!mNewsSource.equals("national-geographic")) {
                 for (int i = 0; i < articles.size(); i++) {
                     String urlToImage = articles.get(i).getUrlToImage();
                     if (urlToImage.contains("http") || urlToImage.contains("https")) { // Custom way of validating News API's image URLs
@@ -401,10 +397,11 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
 
         // Displays the following Snackbar message when the page is refreshed, and then sets the
         // flag back to false.
-        if (pageRefresh) {
+        if (mPageRefresh) {
             Snackbar.make(mCoordLayout, getString(R.string.snackbar_page_refreshed),
                     Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-            pageRefresh = false;
+
+            mPageRefresh = false;
         }
 
         // Updates the empty state view with a no-results-found message.
