@@ -2,6 +2,7 @@ package com.davenotdavid.dndheadlines;
 
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -286,7 +287,31 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
         uriBuilder.appendQueryParameter("source", mNewsSource);
         uriBuilder.appendQueryParameter("apiKey", getString(R.string.news_api_key));
 
-        return new ArticleLoader(this, uriBuilder.toString());
+        // References the string value of the URI into the following variable.
+        final String requestUrl = uriBuilder.toString();
+
+        // Returns the following AsyncTaskLoader.
+        return new AsyncTaskLoader<List<Article>>(this) {
+
+            @Override
+            protected void onStartLoading() {
+                //Log.d(LOG_TAG, "onStartLoading()");
+
+                // Forces a load as its name implies.
+                forceLoad();
+            }
+
+            @Override
+            public List<Article> loadInBackground() {
+                //Log.d(LOG_TAG, "loadInBackground()");
+
+                if (requestUrl == null) return null;
+
+                // Performs the network request, parses the JSON response, and extracts a list of
+                // articles to return.
+                return QueryUtils.fetchArticleData(requestUrl);
+            }
+        };
     }
 
     @Override
