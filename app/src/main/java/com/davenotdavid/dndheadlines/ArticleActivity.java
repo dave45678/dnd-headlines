@@ -77,6 +77,9 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
     // CoordinatorLayout field used for UI purposes such as displaying a Snackbar message.
     private CoordinatorLayout mCoordLayout;
 
+    // Static boolean flag used for indicating whether to force a loader to fetch data or not.
+    private static boolean mForceLoad;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +116,9 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
      * Initialization/instantiation method for UI.
      */
     private void init() {
+
+        // Sets the flag to true to force a loader to run each time this Activity is created.
+        mForceLoad = true;
 
         // CoordinatorLayout initialization of ArticleActivity's layout.
         mCoordLayout = (CoordinatorLayout) findViewById(R.id.activity_main);
@@ -204,6 +210,9 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
 
                 // Sets the flag to true to be addressed later on.
                 mPageRefresh = true;
+
+                // Sets the flag to true to re-force a loader.
+                mForceLoad = true;
 
                 // Reruns the loaders.
                 runLoaders();
@@ -307,12 +316,18 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
         // Returns the following AsyncTaskLoader.
         return new AsyncTaskLoader<List<Article>>(this) {
 
+            /**
+             * Invoked whenever the user returns to the app after being minimized.
+             */
             @Override
             protected void onStartLoading() {
                 //Log.d(LOG_TAG, "onStartLoading()");
 
-                // Forces a load as its name implies.
-                forceLoad();
+                // Only forces a load should the flag be true for the sake of not consistently
+                // running loaders in the background (say, when the user reopens this app).
+                if (mForceLoad) {
+                    forceLoad();
+                }
             }
 
             @Override
@@ -449,6 +464,10 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
         // Invokes the following to display a Snackbar message after successfully refreshing the
         // article page.
         displayRefreshSnackbar();
+
+        // After the loader runs successfully up to this point, the following flag is set to false
+        // so that the loader won't run anymore unnecessarily.
+        mForceLoad = false;
     }
 
     /**
