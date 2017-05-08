@@ -28,10 +28,7 @@
             android:name=".SettingsActivity"
             android:parentActivityName=".ArticleActivity"
             android:label="@string/settings_title"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ArticleActivity"/>
+            android:theme="@style/SettingsTheme">
         </activity>
     </application>
 

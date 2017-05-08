@@ -8,11 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.support.v7.preference.PreferenceManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -41,7 +41,8 @@ import java.util.List;
  * displays the top news/headlines based on a certain news source (either default or user's stored
  * preference).
  */
-public class ArticleActivity extends AppCompatActivity implements LoaderCallbacks<List<Article>> {
+public class ArticleActivity extends AppCompatActivity implements LoaderCallbacks<List<Article>>,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     // Log tag constant.
     private static final String LOG_TAG = ArticleActivity.class.getSimpleName();
@@ -71,14 +72,22 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
     // Android Query (AQuery) field used for caching images from online.
     private AQuery mAQuery;
 
-    // Boolean flag used for indicating whether the refresh button was pressed or not.
-    private boolean mPageRefresh;
+    // Static boolean flag used for indicating whether the refresh button was pressed or not.
+    private static boolean mPageRefresh;
 
     // CoordinatorLayout field used for UI purposes such as displaying a Snackbar message.
     private CoordinatorLayout mCoordLayout;
 
     // Static boolean flag used for indicating whether to force a loader to fetch data or not.
     private static boolean mForceLoad;
+
+    // Static boolean flag used for indicating whether to react accordingly should a settings
+    // preference be changed.
+    private static boolean mPrefsChanged;
+
+    // SharedPreferences object field that's used for user preference data throughout the app's
+    // lifecycle.
+    private SharedPreferences mSharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +102,14 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Unregisters the SharedPreferences from OnSharedPreferenceChangeListener.
+        mSharedPrefs.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu); // Inflates the settings icon
         return true;
@@ -101,12 +118,12 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        // Runs the following code for each menu item.
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent settingsIntent = new Intent(this, SettingsActivity.class);
-                startActivity(settingsIntent);
-                break;
+        // Opens up SettingsActivity via an explicit intent should the following menu item be
+        // clicked.
+        if (item.getItemId() == R.id.action_settings) {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -119,6 +136,17 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
 
         // Sets the flag to true to force a loader to run each time this Activity is created.
         mForceLoad = true;
+
+        // Sets the flag to false since the refresh button hasn't been pressed yet.
+        mPageRefresh = false;
+
+        // Sets the flag to false since the settings preference hasn't changed yet.
+        mPrefsChanged = false;
+
+        // References the PreferenceManager to use throughout the app, and then registers it with
+        // OnSharedPreferenceChangeListener.
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mSharedPrefs.registerOnSharedPreferenceChangeListener(this);
 
         // CoordinatorLayout initialization of ArticleActivity's layout.
         mCoordLayout = (CoordinatorLayout) findViewById(R.id.activity_main);
@@ -244,10 +272,9 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
             // Displays the ProgressBar only if the user has network connection.
             mProgressBar.setVisibility(View.VISIBLE);
 
-            // When the refresh button is pressed, the ListView and empty state TextView will
-            // temporarily be hidden, and the loader will restart for a page-refreshing UI.
+            // Hides the following views and restarts the loader should either flag be true.
             // Otherwise, initializes the loader.
-            if (mPageRefresh) {
+            if (mPageRefresh || mPrefsChanged) {
                 mArticleListView.setVisibility(View.INVISIBLE);
 
                 // Temporarily hides the TextView only if it's already visible. Apparently, the
@@ -258,6 +285,9 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
                 }
 
                 loaderManager.restartLoader(ARTICLE_LOADER_ID, null, this);
+
+                // Resets the flag back to false should it be true.
+                if (mPrefsChanged) mPrefsChanged = false;
             } else {
                 loaderManager.initLoader(ARTICLE_LOADER_ID, null, this);
             }
@@ -268,8 +298,13 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
             Snackbar.make(mCoordLayout, getString(R.string.snackbar_no_internet_connection),
                     Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
-            // Clears the previous article data should the user lose network connection mid-session.
-            if (mPageRefresh) mArticleAdapter.clear();
+            // Clears the article data should the user not have network connection, and then sets
+            // the flag to false.
+            if (mPageRefresh) {
+                mArticleAdapter.clear();
+
+                mPageRefresh = false;
+            }
 
             // Updates the empty state view with a no-connection-error message.
             mEmptyStateTextView.setText(R.string.no_internet_connection);
@@ -289,14 +324,36 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
         }
     }
 
+    /**
+     * Invoked everytime a preference is changed.
+     *
+     * @param sharedPreferences is the SharedPreferences instance that's used throughout the app's
+     *                          lifecycle.
+     * @param key is the SharedPreferences key.
+     */
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        //Log.d(LOG_TAG, "onSharedPreferenceChanged()");
+
+        if (key.equals(getString(R.string.settings_news_sources_key))) {
+
+            // Sets the flag to true since a preference has changed.
+            mPrefsChanged = true;
+
+            // Sets the flag to true to reload the task asynchronously.
+            mForceLoad = true;
+
+            // Reruns the loader.
+            runLoaders();
+        }
+    }
+
     @Override
     public Loader<List<Article>> onCreateLoader(int loaderId, Bundle bundle) {
         //Log.d(LOG_TAG, "onCreateLoader()");
 
-        // Preferences instantiation used to retrieve the user's stored data (news source
-        // preference in this case).
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mNewsSource = sharedPrefs.getString(
+        // References a news source preference into the following String variable.
+        mNewsSource = mSharedPrefs.getString(
                 getString(R.string.settings_news_sources_key),
                 getString(R.string.settings_news_sources_default)
         );
