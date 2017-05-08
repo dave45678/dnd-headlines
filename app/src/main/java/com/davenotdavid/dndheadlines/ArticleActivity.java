@@ -89,6 +89,9 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
     // lifecycle.
     private SharedPreferences mSharedPrefs;
 
+    // CollapsingToolbarLayout field used for setting a title for the app's collapsing toolbar.
+    private CollapsingToolbarLayout mCollapseToolLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,6 +136,11 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
      * Initialization/instantiation method for UI.
      */
     private void init() {
+
+        // References the following CollapsingToolbarLayout, and then initially sets the title as
+        // "Loading..." to display a loading UI.
+        mCollapseToolLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        mCollapseToolLayout.setTitle(getString(R.string.toolbar_loading_title));
 
         // Sets the flag to true to force a loader to run each time this Activity is created.
         mForceLoad = true;
@@ -254,6 +262,9 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
     private void runLoaders() {
         //Log.d(LOG_TAG, "runLoaders()");
 
+        // Sets the toolbar's title to "Loading..." for a better loading UI.
+        mCollapseToolLayout.setTitle(getString(R.string.toolbar_loading_title));
+
         // Retrieves a reference to the LoaderManager in order to interact with loaders.
         LoaderManager loaderManager = getLoaderManager();
 
@@ -297,6 +308,9 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
             // Displays the following Snackbar message.
             Snackbar.make(mCoordLayout, getString(R.string.snackbar_no_internet_connection),
                     Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+
+            // Sets the toolbar's title to "Error".
+            mCollapseToolLayout.setTitle(getString(R.string.toolbar_error_title));
 
             // Clears the article data should the user not have network connection, and then sets
             // the flag to false.
@@ -418,77 +432,77 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
         if (articles == null || articles.isEmpty()) {
             displayRefreshSnackbar();
 
+            // Sets the toolbar's title to "Error".
+            mCollapseToolLayout.setTitle(getString(R.string.toolbar_error_title));
+
             return;
         }
 
-        // Initializes the following toolbar layout to set up the respective news source as its
-        // title.
-        CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        // Sets the toolbar's title to the respective news source name.
         if (mNewsSource.equals(getString(R.string.settings_news_sources_abc_news_au_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_abc_news_au_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_abc_news_au_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_al_jazeera_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_al_jazeera_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_al_jazeera_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_ars_technica_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_ars_technica_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_ars_technica_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_assoc_press_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_assoc_press_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_assoc_press_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_bbc_news_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_bbc_news_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_bbc_news_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_bloomberg_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_bloomberg_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_bloomberg_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_breitbart_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_breitbart_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_breitbart_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_bus_insider_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_bus_insider_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_bus_insider_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_daily_mail_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_daily_mail_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_daily_mail_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_engadget_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_engadget_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_engadget_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_ent_weekly_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_ent_weekly_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_ent_weekly_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_fin_times_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_fin_times_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_fin_times_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_fortune_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_fortune_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_fortune_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_fourfourtwo_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_fourfourtwo_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_fourfourtwo_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_fox_sports_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_fox_sports_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_fox_sports_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_source_default_value))) {
-            collapsingToolbar.setTitle(getString(R.string.google_news));
+            mCollapseToolLayout.setTitle(getString(R.string.google_news));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_ign_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_ign_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_ign_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_mashable_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_mashable_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_mashable_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_metro_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_metro_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_metro_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_mtv_news_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_mtv_news_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_mtv_news_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_nat_geographic_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_nat_geographic_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_nat_geographic_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_ny_magazine_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_ny_magazine_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_ny_magazine_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_nfl_news_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_nfl_news_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_nfl_news_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_reuters_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_reuters_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_reuters_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_talksport_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_talksport_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_talksport_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_techcrunch_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_techcrunch_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_techcrunch_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_techradar_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_techradar_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_techradar_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_guardian_uk_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_guardian_uk_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_guardian_uk_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_the_hindu_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_the_hindu_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_the_hindu_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_the_lad_bible_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_the_lad_bible_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_the_lad_bible_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_the_nyt_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_the_nyt_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_the_nyt_label));
         } else if (mNewsSource.equals(getString(R.string.settings_news_sources_wsj_value))) {
-            collapsingToolbar.setTitle(getString(R.string.settings_news_sources_wsj_label));
+            mCollapseToolLayout.setTitle(getString(R.string.settings_news_sources_wsj_label));
         }
 
         // Adds the list of Articles to the adapter's dataset, and renders backdrop images
