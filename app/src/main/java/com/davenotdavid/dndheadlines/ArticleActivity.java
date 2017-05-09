@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.support.v7.preference.PreferenceManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
@@ -42,7 +43,7 @@ import java.util.List;
  * preference).
  */
 public class ArticleActivity extends AppCompatActivity implements LoaderCallbacks<List<Article>>,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        OnSharedPreferenceChangeListener {
 
     // Log tag constant.
     private static final String LOG_TAG = ArticleActivity.class.getSimpleName();
