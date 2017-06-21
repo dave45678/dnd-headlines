@@ -22,7 +22,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -96,7 +95,7 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_article);
 
         // Invokes the following to initialize/instantiate UI.
         init();
@@ -158,7 +157,7 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
         mSharedPrefs.registerOnSharedPreferenceChangeListener(this);
 
         // CoordinatorLayout initialization of ArticleActivity's layout.
-        mCoordLayout = (CoordinatorLayout) findViewById(R.id.activity_main);
+        mCoordLayout = (CoordinatorLayout) findViewById(R.id.activity_article);
 
         // Instantiates the following to cache images with a URL.
         mAQuery = new AQuery(this);
