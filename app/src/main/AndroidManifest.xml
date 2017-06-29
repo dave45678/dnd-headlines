@@ -28,7 +28,7 @@
             android:parentActivityName=".ArticleActivity"
             android:theme="@style/SettingsTheme" />
         <activity
-            android:name=".ArticleViewActivity"
+            android:name=".SourceViewActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName=".ArticleActivity"
             android:theme="@style/AppTheme" />
