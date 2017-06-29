@@ -179,17 +179,13 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
         findViewById(R.id.news_api_att_img).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri newsApiAttUrl = Uri.parse("https://newsapi.org/");
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, newsApiAttUrl);
 
-                // Verifies that the user's device has the required "app" for running the implicit
-                // intent. Otherwise, displays a Snackbar message that indicates an error.
-                if (browserIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(browserIntent);
-                } else {
-                    Snackbar.make(mCoordLayout, getString(R.string.snackbar_preview_error),
-                            Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                }
+                // Instantiates an Intent object to pass data onto SourceViewActivity for
+                // web-rendering purposes.
+                Intent intent = new Intent(ArticleActivity.this, SourceViewActivity.class);
+                intent.putExtra("source_title", getString(R.string.news_api_name));
+                intent.putExtra("source_url", getString(R.string.news_api_url));
+                startActivity(intent);
             }
         });
 
@@ -209,23 +205,18 @@ public class ArticleActivity extends AppCompatActivity implements LoaderCallback
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-                // Initially parses the article's URL to preview it to the user via an implicit
+                // Initially retrieves the article's URL to display to the user via an explicit
                 // intent. Otherwise, displays a Snackbar message informing the user that the URL
                 // doesn't exist.
                 String articleUrl = mArticleAdapter.getItem(position).getUrl();
                 if (!articleUrl.equals("null")) { // Yes, News API actually returns a String value of null
-                    Uri articlePreviewUrl = Uri.parse(articleUrl);
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, articlePreviewUrl);
 
-                    // Verifies that the user's device has the required "app" for running the
-                    // implicit intent. Otherwise, displays a Snackbar message that indicates an
-                    // error.
-                    if (browserIntent.resolveActivity(getPackageManager()) != null) {
-                        startActivity(browserIntent);
-                    } else {
-                        Snackbar.make(mCoordLayout, getString(R.string.snackbar_preview_error),
-                                Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                    }
+                    // Instantiates an Intent object to pass data onto SourceViewActivity for
+                    // web-rendering purposes.
+                    Intent intent = new Intent(ArticleActivity.this, SourceViewActivity.class);
+                    intent.putExtra("source_title", mArticleAdapter.getItem(position).getTitle());
+                    intent.putExtra("source_url", articleUrl);
+                    startActivity(intent);
                 } else {
                     Snackbar.make(mCoordLayout, getString(R.string.snackbar_no_article_preview),
                             Snackbar.LENGTH_SHORT).setAction("Action", null).show();
