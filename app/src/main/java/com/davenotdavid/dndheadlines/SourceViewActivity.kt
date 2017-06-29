@@ -11,26 +11,26 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
-import kotlinx.android.synthetic.main.activity_article_view.*
+import kotlinx.android.synthetic.main.activity_source_view.*
 
 /**
- * This Activity is responsible for displaying a WebView of the respective article source.
+ * This Activity is responsible for displaying a WebView of the respective source.
  */
-class ArticleViewActivity : AppCompatActivity() {
+class SourceViewActivity : AppCompatActivity() {
 
     // Log tag constant.
-    private val LOG_TAG = ArticleViewActivity::class.java.simpleName
+    private val LOG_TAG = SourceViewActivity::class.java.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_article_view)
+        setContentView(R.layout.activity_source_view)
 
-        // Retrieves the article's title and URL for setting a title and subtitle of the action bar,
+        // Retrieves the source's title and URL for setting a title and subtitle for the action bar,
         // respectively.
-        val articleTitle = intent.getStringExtra("article_title")
-        val articleUrl = intent.getStringExtra("url")
-        supportActionBar?.setTitle(articleTitle)
-        supportActionBar?.setSubtitle(articleUrl)
+        val sourceTitle = intent.getStringExtra("source_title")
+        val sourceUrl = intent.getStringExtra("source_url")
+        supportActionBar?.setTitle(sourceTitle)
+        supportActionBar?.setSubtitle(sourceUrl)
 
         // Sets up a up/home button for the action bar.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -69,8 +69,8 @@ class ArticleViewActivity : AppCompatActivity() {
             }
         })
 
-        // Finally loads the article's URL to the WebView.
-        web_view.loadUrl(articleUrl)
+        // Finally loads the source's URL to the WebView.
+        web_view.loadUrl(sourceUrl)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
