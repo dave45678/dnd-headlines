@@ -28,7 +28,7 @@ class ArticleViewActivity : AppCompatActivity() {
         // Retrieves the article's title and URL for setting a title and subtitle of the action bar,
         // respectively.
         val articleTitle = intent.getStringExtra("article_title")
-        val articleUrl = intent.getStringExtra("article_url")
+        val articleUrl = intent.getStringExtra("url")
         supportActionBar?.setTitle(articleTitle)
         supportActionBar?.setSubtitle(articleUrl)
 
