@@ -13,7 +13,9 @@
     <string name="snackbar_no_internet_connection">No internet connection</string>
     <string name="snackbar_page_refreshed">Page refreshed</string>
 
-    <!-- News API key. -->
+    <!-- News API attributes. -->
+    <string name="news_api_name">News API</string>
+    <string name="news_api_url">https://newsapi.org</string>
     <string name="news_api_key" translatable="false">c6f9761272e94a7fb5bdc53820093348</string>
 
     <string name="settings_menu_item">Settings</string>
