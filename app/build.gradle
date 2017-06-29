@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 25
@@ -26,4 +28,8 @@ dependencies {
     compile 'com.android.support:preference-v7:25.3.1'
     compile 'joda-time:joda-time:2.9.9'
     compile 'com.googlecode.android-query:android-query:0.24.3'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }
