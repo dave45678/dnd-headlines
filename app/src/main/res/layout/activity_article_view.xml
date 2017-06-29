@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.davenotdavid.dndheadlines.ArticleActivityTest">
+    tools:context="com.davenotdavid.dndheadlines.ArticleViewActivity">
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -17,7 +17,7 @@
         tools:progress="45" />
 
     <WebView
-        android:id="@+id/webview"
+        android:id="@+id/web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

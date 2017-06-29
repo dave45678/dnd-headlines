@@ -10,63 +10,74 @@ import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.ProgressBar
 
+import kotlinx.android.synthetic.main.activity_article_view.*
+
+/**
+ * This Activity is responsible for displaying a WebView of the respective article source.
+ */
 class ArticleViewActivity : AppCompatActivity() {
 
-    // WebView field used for displaying a respective article source as well as its web
-    // functionality.
-    private var mWebView: WebView? = null
+    // Log tag constant.
+    private val LOG_TAG = ArticleViewActivity::class.java.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_article_view)
 
-        val articleUrl = intent.getStringExtra("article_url")
+        // Retrieves the article's title and URL for setting a title and subtitle of the action bar,
+        // respectively.
         val articleTitle = intent.getStringExtra("article_title")
-        supportActionBar!!.setTitle(articleTitle)
-        supportActionBar!!.setSubtitle(articleUrl)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        val articleUrl = intent.getStringExtra("article_url")
+        supportActionBar?.setTitle(articleTitle)
+        supportActionBar?.setSubtitle(articleUrl)
 
-        mWebView = findViewById(R.id.webview) as WebView
+        // Sets up a up/home button for the action bar.
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        mWebView!!.settings.builtInZoomControls = true
-        val progressBar = findViewById(R.id.progress_bar) as ProgressBar
-        mWebView!!.setWebChromeClient(object : WebChromeClient() {
+        // Allows the WebView to be zoomable.
+        web_view.settings.builtInZoomControls = true
+
+        // Addresses things that may impact browser UI, particularly progress updates of the URL's
+        // load time.
+        web_view.setWebChromeClient(object : WebChromeClient() {
             override fun onProgressChanged(webView: WebView, progress: Int) {
-                //Log.d(LOG_TAG, String.valueOf(progress));
 
                 // Invoked once at most right when a new page is opened.
                 if (webView.canGoBack()) {
-                    progressBar.visibility = View.VISIBLE
+                    progress_bar.visibility = View.VISIBLE
                 }
 
                 // Updates the progress bar determinantly.
-                progressBar.progress = progress
+                progress_bar.progress = progress
 
                 // Hides the progress bar when it finishes loading.
                 if (progress == 100) {
-                    progressBar.visibility = View.GONE
+                    progress_bar.visibility = View.GONE
                 }
             }
         })
-        mWebView!!.setWebViewClient(object : WebViewClient() {
+
+        // Addresses things that may impact the rendering of content, particularly web errors.
+        web_view.setWebViewClient(object : WebViewClient() {
             override fun onReceivedError(view: WebView, request: WebResourceRequest,
                                          error: WebResourceError) {
                 super.onReceivedError(view, request, error)
 
+                // Logs the web error.
                 Log.e(LOG_TAG, error.toString())
             }
         })
 
-        mWebView!!.loadUrl(articleUrl)
+        // Finally loads the article's URL to the WebView.
+        web_view.loadUrl(articleUrl)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         // Dismisses the Activity should the action bar's up/home button be pressed.
         if (item.itemId == android.R.id.home) {
-            mWebView!!.clearCache(true) // Clears the app's cache
+            web_view.clearCache(true) // Clears the app's cache
 
             finish()
 
@@ -80,17 +91,11 @@ class ArticleViewActivity : AppCompatActivity() {
 
         // The web page goes back in history only if there are stacks in the history. Otherwise,
         // dismisses the Activity.
-        if (mWebView!!.canGoBack()) {
-            mWebView!!.goBack()
+        if (web_view.canGoBack()) {
+            web_view.goBack()
         } else {
-            mWebView!!.clearCache(true) // Clears the app's cache
+            web_view.clearCache(true) // Clears the app's cache
             super.onBackPressed()
         }
-    }
-
-    companion object {
-
-        // Log tag constant.
-        private val LOG_TAG = ArticleViewActivity::class.java!!.getSimpleName()
     }
 }
