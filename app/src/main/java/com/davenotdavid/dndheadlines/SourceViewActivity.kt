@@ -54,6 +54,10 @@ class SourceViewActivity : AppCompatActivity() {
                 // Hides the progress bar when it finishes loading.
                 if (progress == 100) {
                     progress_bar.visibility = View.GONE
+
+                    // Updates the action bar's title and subtitle, accordingly.
+                    supportActionBar?.setTitle(webView.title)
+                    supportActionBar?.setSubtitle(webView.url)
                 }
             }
         })
