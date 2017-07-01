@@ -7,6 +7,7 @@
     <color name="colorAccent">#E040FB</color>
     <color name="colorAccentLight">#E1BEE7</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorLightGray">#FFD7D7D7</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorNewsApi">#5cc7b2</color>
 </resources>
