@@ -131,8 +131,8 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         collapsing_toolbar.title = getString(R.string.toolbar_loading_title)
 
         // Makes the RecyclerView scroll down linearally as well as have a fixed size.
-        article_list.layoutManager = LinearLayoutManager(this)
-        article_list.setHasFixedSize(true)
+        article_recycler_view.layoutManager = LinearLayoutManager(this)
+        article_recycler_view.setHasFixedSize(true)
 
         // Sets values for the following flags each time the Activity is created.
         mForceLoad = true
@@ -155,10 +155,10 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         setSupportActionBar(toolbar)
 
         // Enables nested scrolling for the ListView which only works for Lollipop (21) and above.
-        ViewCompat.setNestedScrollingEnabled(article_list, true)
+        ViewCompat.setNestedScrollingEnabled(article_recycler_view, true)
 
         // Sets the custom News API attribution image clickable for branding guideline purposes.
-        news_api_att_img.setOnClickListener {
+        attribution_imgview.setOnClickListener {
 
             // Instantiates an Intent object to pass data onto SourceViewActivity for web-rendering
             // purposes.
@@ -169,13 +169,13 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         }
 
         // Sets the adapter on the RecyclerView so its list can be populated with UI.
-        article_list.adapter = ArticleAdapter(this, mutableListOf<Article>())
+        article_recycler_view.adapter = ArticleAdapter(this, mutableListOf<Article>())
 
         // MediaPlayer object used for sound UI.
         val buttonSound = MediaPlayer.create(this, R.raw.button_sound)
 
         // Sets the floating action button clickable with the following refresh functionality.
-        refresh_button.setOnClickListener {
+        refresh_fab.setOnClickListener {
 
             // Plays a button sound when the refresh button is clicked.
             buttonSound.start()
@@ -230,11 +230,11 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             // Hides the following views and restarts the loader should either flag be true.
             // Otherwise, initializes the loader.
             if (mPageRefresh || mPrefsChanged) {
-                article_list.visibility = View.INVISIBLE
+                article_recycler_view.visibility = View.INVISIBLE
 
                 // Temporarily hides the TextView only if it's already visible.
-                if (empty_view.visibility == View.VISIBLE) {
-                    empty_view.visibility = View.INVISIBLE
+                if (empty_text_view.visibility == View.VISIBLE) {
+                    empty_text_view.visibility = View.INVISIBLE
                 }
 
                 loaderManager.restartLoader(ARTICLE_LOADER_ID, null, this)
@@ -259,9 +259,9 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
 
             // Updates the empty state view with a no-connection-error message while hiding the
             // RecyclerView.
-            empty_view.setText(R.string.no_internet_connection)
-            empty_view.visibility = View.VISIBLE
-            article_list.visibility = View.INVISIBLE
+            empty_text_view.setText(R.string.no_internet_connection)
+            empty_text_view.visibility = View.VISIBLE
+            article_recycler_view.visibility = View.INVISIBLE
         }
     }
 
@@ -362,9 +362,9 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
 
             // Updates the empty state view with a no-results-found message while hiding the
             // recycler view.
-            empty_view.setText(R.string.no_results_found)
-            empty_view.visibility = View.VISIBLE
-            article_list.visibility = View.INVISIBLE
+            empty_text_view.setText(R.string.no_results_found)
+            empty_text_view.visibility = View.VISIBLE
+            article_recycler_view.visibility = View.INVISIBLE
 
             return
         }
@@ -441,7 +441,7 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         if (articles != null && !articles.isEmpty()) {
             //Log.d(LOG_TAG, "onLoadFinished(): Adding articles and rendering backdrop images");
 
-            article_list.adapter = ArticleAdapter(this, articles)
+            article_recycler_view.adapter = ArticleAdapter(this, articles)
 
             // Renders the backdrop image accordingly should the news source not be National
             // Geographic (their images are too big to scale down). Otherwise, renders National
@@ -450,19 +450,19 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
                 for (i in articles.indices) {
                     val urlToImage = articles[i].urlToImage
                     if (urlToImage.contains("http") || urlToImage.contains("https")) { // Custom way of validating News API's image URLs
-                        mAQuery!!.id(backdrop).image(urlToImage)
+                        mAQuery!!.id(backdrop_image_view).image(urlToImage)
                         break
                     }
                 }
             } else {
-                backdrop.setImageResource(R.drawable.national_geo_logo)
+                backdrop_image_view.setImageResource(R.drawable.national_geo_logo)
             }
         }
 
         // Hides the empty state view, and makes the RecyclerView visible should the data-fetching
         // process be successful.
-        empty_view.visibility = View.INVISIBLE
-        article_list.visibility = View.VISIBLE
+        empty_text_view.visibility = View.INVISIBLE
+        article_recycler_view.visibility = View.VISIBLE
 
         // Invokes the following to display a Snackbar message after successfully refreshing the
         // article page.
@@ -482,7 +482,7 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         //Log.d(LOG_TAG, "onLoaderReset()");
 
         // "Clears" out the existing data since the loader resetted.
-        article_list.adapter = ArticleAdapter(this, mutableListOf<Article>())
+        article_recycler_view.adapter = ArticleAdapter(this, mutableListOf<Article>())
     }
 
     /**
