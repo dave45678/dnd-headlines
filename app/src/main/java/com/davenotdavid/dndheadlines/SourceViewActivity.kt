@@ -25,12 +25,15 @@ class SourceViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_source_view)
 
-        // Retrieves the source's title and URL for setting a title and subtitle for the action bar,
+        // Sets the custom toolbar to act as the Activity's action bar.
+        setSupportActionBar(toolbar)
+
+        // Retrieves the source's title and URL for setting a title and subtitle for the toolbar,
         // respectively.
         val sourceTitle = intent.getStringExtra("source_title")
         val sourceUrl = intent.getStringExtra("source_url")
-        supportActionBar?.setTitle(sourceTitle)
-        supportActionBar?.setSubtitle(sourceUrl)
+        toolbar.setTitle(sourceTitle)
+        toolbar.setSubtitle(sourceUrl)
 
         // Sets up a up/home button for the action bar.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -55,9 +58,9 @@ class SourceViewActivity : AppCompatActivity() {
                 if (progress == 100) {
                     progress_bar.visibility = View.GONE
 
-                    // Updates the action bar's title and subtitle, accordingly.
-                    supportActionBar?.setTitle(webView.title)
-                    supportActionBar?.setSubtitle(webView.url)
+                    // Updates the toolbar's title and subtitle, accordingly.
+                    toolbar.setTitle(webView.title)
+                    toolbar.setSubtitle(webView.url)
                 }
             }
         })
