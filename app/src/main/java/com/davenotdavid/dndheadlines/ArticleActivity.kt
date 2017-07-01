@@ -16,14 +16,13 @@ import android.support.v4.view.ViewCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 
 import com.androidquery.AQuery
-
-import java.util.ArrayList
 
 import kotlinx.android.synthetic.main.activity_article.*
 
@@ -33,7 +32,7 @@ import kotlinx.android.synthetic.main.activity_article.*
  * preference).
  */
 class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
-        OnSharedPreferenceChangeListener {
+        OnSharedPreferenceChangeListener, ArticleAdapter.ListItemClickListener {
 
     // Log tag constant.
     private val LOG_TAG = ArticleActivity::class.java.simpleName
@@ -54,12 +53,9 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
     // Boolean flag used for indicating whether to force a loader to fetch data or not.
     private var mForceLoad: Boolean = false
 
-    // Static boolean flag used for indicating whether to react accordingly should a settings
-    // preference be changed.
+    // Boolean flag used for indicating whether to react accordingly should a settings preference
+    // be changed.
     private var mPrefsChanged: Boolean = false
-
-    // Adapter for the list of Articles.
-    private var mArticleAdapter: ArticleAdapter? = null
 
     // Android Query (AQuery) field used for caching images from online.
     private var mAQuery: AQuery? = null
@@ -105,6 +101,28 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
     }
 
     /**
+     * RecyclerView's click method functionality.
+     */
+    override fun onListItemClick(article: Article) {
+
+        // Initially retrieves the article's URL to display to the user via an explicit intent.
+        // Otherwise, displays a Snackbar message informing the user that the URL doesn't exist.
+        val articleUrl = article.url
+        if (articleUrl != "null") { // Yes, News API actually returns a String value of null
+
+            // Instantiates an Intent object to pass data onto SourceViewActivity for
+            // web-rendering purposes.
+            val intent = Intent(this, SourceViewActivity::class.java)
+            intent.putExtra("source_title", article.title)
+            intent.putExtra("source_url", articleUrl)
+            startActivity(intent)
+        } else {
+            Snackbar.make(activity_article, getString(R.string.snackbar_no_article_preview),
+                    Snackbar.LENGTH_SHORT).setAction("Action", null).show()
+        }
+    }
+
+    /**
      * Initialization/instantiation method for UI.
      */
     private fun init() {
@@ -112,19 +130,23 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         // Initially sets the title as "Loading..." to display a loading UI.
         collapsing_toolbar.title = getString(R.string.toolbar_loading_title)
 
-        // Sets the flag to true to force a loader to run each time this Activity is created.
+        // Makes the RecyclerView scroll down linearally as well as have a fixed size.
+        article_list.layoutManager = LinearLayoutManager(this)
+        article_list.setHasFixedSize(true)
+
+        // Sets values for the following flags each time the Activity is created.
         mForceLoad = true
-
-        // Sets the flag to false since the refresh button hasn't been pressed yet.
         mPageRefresh = false
-
-        // Sets the flag to false since the settings preference hasn't changed yet.
         mPrefsChanged = false
 
         // References the PreferenceManager to use throughout the app, and then registers it with
         // OnSharedPreferenceChangeListener.
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         mSharedPrefs!!.registerOnSharedPreferenceChangeListener(this)
+
+        // Sets the news source preference during the app's initial runtime as well as during
+        // configuration changes.
+        setNewsSource()
 
         // Instantiates the following to cache images with a URL.
         mAQuery = AQuery(this)
@@ -146,36 +168,8 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             startActivity(intent)
         }
 
-        // Sets the empty state TextView to the ListView for when it should be empty.
-        article_list.emptyView = empty_view
-
-        // Instantiates the following adapter that takes an empty array list as initial input.
-        mArticleAdapter = ArticleAdapter(this, ArrayList<Article>())
-
-        // Sets the adapter on the list view so the list can be populated with UI.
-        article_list.adapter = mArticleAdapter
-
-        // Sets the ListView of Articles clickable with functionality.
-        article_list.onItemClickListener = AdapterView.OnItemClickListener {
-            adapterView, view, position, l ->
-
-            // Initially retrieves the article's URL to display to the user via an explicit intent.
-            // Otherwise, displays a Snackbar message informing the user that the URL doesn't exist.
-
-            val articleUrl = mArticleAdapter!!.getItem(position).url
-            if (articleUrl != "null") { // Yes, News API actually returns a String value of null
-
-                // Instantiates an Intent object to pass data onto SourceViewActivity for
-                // web-rendering purposes.
-                val intent = Intent(this, SourceViewActivity::class.java)
-                intent.putExtra("source_title", mArticleAdapter!!.getItem(position)!!.title)
-                intent.putExtra("source_url", articleUrl)
-                startActivity(intent)
-            } else {
-                Snackbar.make(activity_article, getString(R.string.snackbar_no_article_preview),
-                        Snackbar.LENGTH_SHORT).setAction("Action", null).show()
-            }
-        }
+        // Sets the adapter on the RecyclerView so its list can be populated with UI.
+        article_list.adapter = ArticleAdapter(this, mutableListOf<Article>())
 
         // MediaPlayer object used for sound UI.
         val buttonSound = MediaPlayer.create(this, R.raw.button_sound)
@@ -195,6 +189,16 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             // Reruns the loaders.
             runLoaders()
         }
+    }
+
+    /**
+     * Setter for the news source preference.
+     */
+    private fun setNewsSource() {
+        mNewsSource = mSharedPrefs!!.getString(
+                getString(R.string.settings_news_sources_key),
+                getString(R.string.settings_news_sources_default)
+        )
     }
 
     /**
@@ -228,9 +232,7 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             if (mPageRefresh || mPrefsChanged) {
                 article_list.visibility = View.INVISIBLE
 
-                // Temporarily hides the TextView only if it's already visible. Apparently, the
-                // visibility is set back when the text is set when encountering another empty
-                // state.
+                // Temporarily hides the TextView only if it's already visible.
                 if (empty_view.visibility == View.VISIBLE) {
                     empty_view.visibility = View.INVISIBLE
                 }
@@ -252,16 +254,14 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             // Sets the toolbar's title to "Error".
             collapsing_toolbar.title = getString(R.string.toolbar_error_title)
 
-            // Clears the article data should the user not have network connection, and then sets
-            // the flag to false.
-            if (mPageRefresh) {
-                mArticleAdapter!!.clear()
+            // Resets the flag back to false.
+            if (mPageRefresh) mPageRefresh = false
 
-                mPageRefresh = false
-            }
-
-            // Updates the empty state view with a no-connection-error message.
+            // Updates the empty state view with a no-connection-error message while hiding the
+            // RecyclerView.
             empty_view.setText(R.string.no_internet_connection)
+            empty_view.visibility = View.VISIBLE
+            article_list.visibility = View.INVISIBLE
         }
     }
 
@@ -296,6 +296,9 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             // Sets the flag to true to reload the task asynchronously.
             mForceLoad = true
 
+            // Updates the news source preference, accordingly.
+            setNewsSource()
+
             // Reruns the loader.
             runLoaders()
         }
@@ -303,12 +306,6 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
 
     override fun onCreateLoader(loaderId: Int, bundle: Bundle?): Loader<List<Article>> {
         //Log.d(LOG_TAG, "onCreateLoader()");
-
-        // References a news source preference into the following String variable.
-        mNewsSource = mSharedPrefs!!.getString(
-                getString(R.string.settings_news_sources_key),
-                getString(R.string.settings_news_sources_default)
-        )
 
         // Initializes the News API endpoint URL as a URI to build and eventually append upon.
         val baseUri = Uri.parse(NEWS_ENDPOINT_URL)
@@ -355,12 +352,6 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         // Hides the progress bar after the data-fetching process is complete.
         progress_bar.visibility = View.INVISIBLE
 
-        // Clears the adapter of previous article data.
-        mArticleAdapter!!.clear()
-
-        // Updates the empty state view with a no-results-found message.
-        empty_view.setText(R.string.no_results_found)
-
         // Displays a refresh-Snackbar message and returns out of onLoadFinished() immediately
         // should the article data be either null or empty.
         if (articles == null || articles.isEmpty()) {
@@ -368,6 +359,12 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
 
             // Sets the toolbar's title to "Error".
             collapsing_toolbar.title = getString(R.string.toolbar_error_title)
+
+            // Updates the empty state view with a no-results-found message while hiding the
+            // recycler view.
+            empty_view.setText(R.string.no_results_found)
+            empty_view.visibility = View.VISIBLE
+            article_list.visibility = View.INVISIBLE
 
             return
         }
@@ -444,7 +441,7 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         if (articles != null && !articles.isEmpty()) {
             //Log.d(LOG_TAG, "onLoadFinished(): Adding articles and rendering backdrop images");
 
-            mArticleAdapter!!.addAll(articles)
+            article_list.adapter = ArticleAdapter(this, articles)
 
             // Renders the backdrop image accordingly should the news source not be National
             // Geographic (their images are too big to scale down). Otherwise, renders National
@@ -462,7 +459,9 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             }
         }
 
-        // Sets the ListView visible, particularly for page-refreshing purposes.
+        // Hides the empty state view, and makes the RecyclerView visible should the data-fetching
+        // process be successful.
+        empty_view.visibility = View.INVISIBLE
         article_list.visibility = View.VISIBLE
 
         // Invokes the following to display a Snackbar message after successfully refreshing the
@@ -476,14 +475,14 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
 
     /**
      * Invoked when the app closes.
-
+     *
      * @param loader is the passed-in loader that could be addressed.
      */
     override fun onLoaderReset(loader: Loader<List<Article>>) {
         //Log.d(LOG_TAG, "onLoaderReset()");
 
-        // Clears out the existing data since the loader resetted.
-        mArticleAdapter!!.clear()
+        // "Clears" out the existing data since the loader resetted.
+        article_list.adapter = ArticleAdapter(this, mutableListOf<Article>())
     }
 
     /**
