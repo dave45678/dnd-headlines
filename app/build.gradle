@@ -29,6 +29,7 @@ dependencies {
     compile 'joda-time:joda-time:2.9.9'
     compile 'com.googlecode.android-query:android-query:0.24.3'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile 'com.android.support:recyclerview-v7:25.3.1'
 }
 repositories {
     mavenCentral()
