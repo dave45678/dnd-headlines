@@ -12,6 +12,11 @@
     <string name="snackbar_no_article_preview">There\'s no preview for this article</string>
     <string name="snackbar_no_internet_connection">No internet connection</string>
     <string name="snackbar_page_refreshed">Page refreshed</string>
+    <string name="reload_menu_item">Reload</string>
+    <string name="back_menu_item">Back</string>
+    <string name="forward_menu_item">Forward</string>
+    <string name="no_back_history_toast">Can\'t go back in history</string>
+    <string name="no_forward_history_toast">Can\'t go back in history</string>
 
     <!-- News API attributes. -->
     <string name="news_api_name">News API</string>

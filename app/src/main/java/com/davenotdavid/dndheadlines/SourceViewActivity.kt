@@ -3,6 +3,7 @@ package com.davenotdavid.dndheadlines
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.webkit.WebChromeClient
@@ -10,6 +11,7 @@ import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 
 import kotlinx.android.synthetic.main.activity_source_view.*
 
@@ -76,6 +78,11 @@ class SourceViewActivity : AppCompatActivity() {
         web_view.loadUrl(intent.getStringExtra("source_url"))
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.webview_functionality, menu) // Inflates the WebView menu file
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         // Dismisses the Activity should the action bar's up/home button be pressed.
@@ -84,7 +91,27 @@ class SourceViewActivity : AppCompatActivity() {
 
             finish()
 
-            return true
+        // Reloads the web page.
+        } else if (item.itemId == R.id.action_reload) {
+            web_view.reload()
+
+        // The WebView goes back in history, but otherwise displays a Toast if it's not possible.
+        } else if (item.itemId == R.id.action_back) {
+            if (web_view.canGoBack()) {
+                web_view.goBack()
+            } else {
+                Toast.makeText(this, getString(R.string.no_back_history_toast),
+                        Toast.LENGTH_SHORT).show()
+            }
+
+        // The WebView goes forward in history, but otherwise displays a Toast if it's not possible.
+        } else if (item.itemId == R.id.action_forward) {
+            if (web_view.canGoForward()) {
+                web_view.goForward()
+            } else {
+                Toast.makeText(this, getString(R.string.no_forward_history_toast),
+                        Toast.LENGTH_SHORT).show()
+            }
         }
 
         return super.onOptionsItemSelected(item)

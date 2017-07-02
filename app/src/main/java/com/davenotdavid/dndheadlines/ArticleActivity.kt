@@ -82,8 +82,8 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.settings, menu) // Inflates the settings icon
-        return true
+        menuInflater.inflate(R.menu.settings, menu) // Inflates the settings menu file
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -93,7 +93,6 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         if (item.itemId == R.id.action_settings) {
             val settingsIntent = Intent(this, SettingsActivity::class.java)
             startActivity(settingsIntent)
-            return true
         }
 
         return super.onOptionsItemSelected(item)
