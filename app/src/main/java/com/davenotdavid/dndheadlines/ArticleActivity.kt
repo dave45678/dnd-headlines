@@ -17,7 +17,6 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -83,7 +82,7 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main, menu) // Inflates the settings icon
+        menuInflater.inflate(R.menu.settings, menu) // Inflates the settings icon
         return true
     }
 
