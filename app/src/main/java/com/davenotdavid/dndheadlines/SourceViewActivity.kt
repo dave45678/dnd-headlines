@@ -80,7 +80,7 @@ class SourceViewActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.webview_functionality, menu) // Inflates the WebView menu file
-        return super.onCreateOptionsMenu(menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -91,9 +91,13 @@ class SourceViewActivity : AppCompatActivity() {
 
             finish()
 
+            return true
+
         // Reloads the web page.
         } else if (item.itemId == R.id.action_reload) {
             web_view.reload()
+
+            return true
 
         // The WebView goes back in history, but otherwise displays a Toast if it's not possible.
         } else if (item.itemId == R.id.action_back) {
@@ -104,6 +108,8 @@ class SourceViewActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT).show()
             }
 
+            return true
+
         // The WebView goes forward in history, but otherwise displays a Toast if it's not possible.
         } else if (item.itemId == R.id.action_forward) {
             if (web_view.canGoForward()) {
@@ -112,6 +118,8 @@ class SourceViewActivity : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.no_forward_history_toast),
                         Toast.LENGTH_SHORT).show()
             }
+
+            return true
         }
 
         return super.onOptionsItemSelected(item)
