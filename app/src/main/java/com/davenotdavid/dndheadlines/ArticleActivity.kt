@@ -113,7 +113,6 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             // Instantiates an Intent object to pass data onto SourceViewActivity for
             // web-rendering purposes.
             val intent = Intent(this, SourceViewActivity::class.java)
-            intent.putExtra("source_title", article.title)
             intent.putExtra("source_url", articleUrl)
             startActivity(intent)
         } else {
@@ -163,7 +162,6 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             // Instantiates an Intent object to pass data onto SourceViewActivity for web-rendering
             // purposes.
             val intent = Intent(this, SourceViewActivity::class.java)
-            intent.putExtra("source_title", getString(R.string.news_api_name))
             intent.putExtra("source_url", getString(R.string.news_api_url))
             startActivity(intent)
         }

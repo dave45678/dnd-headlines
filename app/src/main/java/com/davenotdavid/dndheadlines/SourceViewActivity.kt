@@ -28,13 +28,6 @@ class SourceViewActivity : AppCompatActivity() {
         // Sets the custom toolbar to act as the Activity's action bar.
         setSupportActionBar(toolbar)
 
-        // Retrieves the source's title and URL for setting a title and subtitle for the toolbar,
-        // respectively.
-        val sourceTitle = intent.getStringExtra("source_title")
-        val sourceUrl = intent.getStringExtra("source_url")
-        toolbar.setTitle(sourceTitle)
-        toolbar.setSubtitle(sourceUrl)
-
         // Sets up a up/home button for the action bar.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -45,6 +38,8 @@ class SourceViewActivity : AppCompatActivity() {
         // load time.
         web_view.setWebChromeClient(object : WebChromeClient() {
             override fun onProgressChanged(webView: WebView, progress: Int) {
+                toolbar.setTitle(webView.title)
+                toolbar.setSubtitle(webView.url)
 
                 // Invoked once at most right when a new page is opened.
                 if (webView.canGoBack()) {
@@ -62,10 +57,6 @@ class SourceViewActivity : AppCompatActivity() {
 
                     // Scrolls the NestedScrollView (that consists of the WebView) to the top.
                     nested_scroll_view.scrollTo(0, 0)
-
-                    // Updates the toolbar's title and subtitle, accordingly.
-                    toolbar.setTitle(webView.title)
-                    toolbar.setSubtitle(webView.url)
                 }
             }
         })
@@ -82,7 +73,7 @@ class SourceViewActivity : AppCompatActivity() {
         })
 
         // Finally loads the source's URL to the WebView.
-        web_view.loadUrl(sourceUrl)
+        web_view.loadUrl(intent.getStringExtra("source_url"))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
