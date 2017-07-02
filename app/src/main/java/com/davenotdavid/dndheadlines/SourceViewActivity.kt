@@ -54,9 +54,14 @@ class SourceViewActivity : AppCompatActivity() {
                 // Updates the progress bar determinantly.
                 progress_bar.progress = progress
 
-                // Hides the progress bar when it finishes loading.
+                // Runs the following functionality when the web page finishes loading.
                 if (progress == 100) {
+
+                    // Hides the progress bar.
                     progress_bar.visibility = View.GONE
+
+                    // Scrolls the NestedScrollView (that consists of the WebView) to the top.
+                    nested_scroll_view.scrollTo(0, 0)
 
                     // Updates the toolbar's title and subtitle, accordingly.
                     toolbar.setTitle(webView.title)
@@ -67,9 +72,9 @@ class SourceViewActivity : AppCompatActivity() {
 
         // Addresses things that may impact the rendering of content, particularly web errors.
         web_view.setWebViewClient(object : WebViewClient() {
-            override fun onReceivedError(view: WebView, request: WebResourceRequest,
+            override fun onReceivedError(webView: WebView, request: WebResourceRequest,
                                          error: WebResourceError) {
-                super.onReceivedError(view, request, error)
+                super.onReceivedError(webView, request, error)
 
                 // Logs the web error.
                 Log.e(LOG_TAG, error.toString())
