@@ -1,19 +1,15 @@
 package com.davenotdavid.dndheadlines
 
 import android.util.Log
+import okhttp3.OkHttpClient
+import okhttp3.Request
 
 import org.json.JSONException
 import org.json.JSONObject
 
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.MalformedURLException
-import java.net.URL
-import java.util.Scanner
-
 /**
  * Object/singleton class that consists of helper methods used for requesting and retrieving
- * article data from the News API on a certain source.
+ * article data from the News API on a certain news source.
  */
 object QueryUtils {
 
@@ -25,77 +21,31 @@ object QueryUtils {
      */
     fun fetchArticleData(requestUrl: String): List<Article>? {
 
-        // Creates a URL object.
-        val url = createUrl(requestUrl)
-
-        // Performs an HTTP request to the URL and receives a JSON response back.
+        // Performs an HTTP request via the OkHttp client library of the request URL and retrieves
+        // a JSON (string) response back.
         var jsonResponse: String? = null
         try {
-            jsonResponse = getResponseFromHttpUrl(url)
-        } catch (e: IOException) {
+            val client = OkHttpClient()
+            val request = Request.Builder()
+                    .url(requestUrl)
+                    .build()
+            val response = client.newCall(request).execute()
+
+            // Reassigns the value of the (string) response.
+            jsonResponse = response.body()?.string()
+        } catch (e: Exception) {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e)
         }
 
-        // Extracts relevant fields from the JSON response and creates a list of Articles to return.
-        return extractFeatureFromJson(jsonResponse)
+        // Extracts relevant data from the JSON response and creates a list of Articles to return.
+        return extractDataFromJson(jsonResponse)
     }
 
     /**
-     * Returns a new URL object from the given string URL.
+     * Returns a list of [Article] objects after parsing and extracting relevant data from the JSON
+     * (string) response.
      */
-    private fun createUrl(stringUrl: String): URL? {
-        var url: URL? = null
-        try {
-            url = URL(stringUrl)
-        } catch (e: MalformedURLException) {
-            Log.e(LOG_TAG, "Problem building the URL ", e)
-        }
-
-        return url
-    }
-
-    /**
-     * Makes an HTTP request to the given URL and returns the entire JSON response.
-     *
-     * @param url is the URL to fetch the HTTP response from.
-     */
-    @Throws(IOException::class)
-    fun getResponseFromHttpUrl(url: URL?): String? {
-        val urlConnection = url?.openConnection() as HttpURLConnection
-
-        try {
-
-            // Retrieves the input stream and parses the response should the request be successful
-            // with a response code of 200, or the HTTP_OK constant.
-            if (urlConnection.responseCode == HttpURLConnection.HTTP_OK) {
-
-                // A hack used to initially convert the input stream to a readable string, and then
-                // tokenizes the entire stream.
-                val inputStream = urlConnection.inputStream
-                val scanner = Scanner(inputStream)
-                scanner.useDelimiter("\\A") // Regex char that implies the first token
-
-                // Returns the string of data should it exist.
-                if (scanner.hasNext()) {
-                    return scanner.next()
-                }
-            } else {
-                Log.e(LOG_TAG, "Error response code: " + urlConnection.responseCode)
-            }
-        } finally {
-
-            // Disconnects/closes the following to extract resources.
-            urlConnection?.disconnect()
-        }
-
-        return null
-    }
-
-    /**
-     * Return a list of [Article] objects that has been built up from parsing the given JSON
-     * response.
-     */
-    private fun extractFeatureFromJson(jsonResponse: String?): List<Article>? {
+    private fun extractDataFromJson(jsonResponse: String?): List<Article>? {
 
         // Returns immediately should the JSON string be empty or null.
         if (jsonResponse == null || jsonResponse.isEmpty()) {
