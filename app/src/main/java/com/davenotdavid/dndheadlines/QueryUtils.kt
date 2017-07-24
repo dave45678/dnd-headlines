@@ -1,11 +1,13 @@
 package com.davenotdavid.dndheadlines
 
 import android.util.Log
+
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
+
 import okhttp3.OkHttpClient
 import okhttp3.Request
-
-import org.json.JSONException
-import org.json.JSONObject
 
 /**
  * Object/singleton class that consists of helper methods used for requesting and retrieving
@@ -55,46 +57,37 @@ object QueryUtils {
         // Creates an empty ArrayList to add Articles to.
         val articles = mutableListOf<Article>()
 
-        // Tries to parse the JSON response string. Otherwise, catches a JSONException.
+        // Uses GSON to parse the JSON string as an object, and then into a JSON array of data.
+        val gson = Gson()
+        val collectionType = object : TypeToken<Collection<Article>>(){}.type
+        var articleResult = emptyArray<Article>()
         try {
+            val jsonObject = gson.fromJson(jsonResponse, JsonObject::class.java)
+            val jsonArray = jsonObject.getAsJsonArray("articles")
+            val enums = gson.fromJson<Collection<Article>>(jsonArray, collectionType)
 
-            // Creates a JSONObject from the JSON response string.
-            val baseJsonResponse = JSONObject(jsonResponse)
-
-            // Extracts the JSONArray associated with the key called "articles", which represents a
-            // list of articles.
-            val articleArray = baseJsonResponse.getJSONArray("articles")
-
-            // Creates a Article for each article in the array.
-            for (i in 0..articleArray.length() - 1) {
-
-                // Retrieves a single article within each iteration.
-                val currentArticle = articleArray.getJSONObject(i)
-
-                // Extracts values for the following keys. Only the top 10 (at most) articles are
-                // retrieved from the server, so it's essential that each of these gets added to
-                // the list despite some of its values being "null" - yes, a String value of null
-                // is really returned from the News API's JSON response.
-                val title = if (currentArticle.has("title")) currentArticle.getString("title")
-                else "null" // Otherwise, returns a String value of null to match News API's standards
-
-                val url = if (currentArticle.has("url")) currentArticle.getString("url")
-                else "null"
-
-                val urlToImage =
-                        if (currentArticle.has("urlToImage")) currentArticle.getString("urlToImage")
-                else "null"
-
-                val publishedAt =
-                        if (currentArticle.has("publishedAt")) currentArticle.getString("publishedAt")
-                else "null"
-
-                // Adds an Article object with the extracted values to the list of articles.
-                articles.add(Article(title, url, urlToImage, publishedAt))
-            }
-
-        } catch (e: JSONException) {
+            // Reassigns the array to an iterable list of JSON data.
+            articleResult = enums.toTypedArray<Article>()
+        } catch (e: Exception) {
             Log.e(LOG_TAG, "Problem parsing the article JSON results", e)
+
+            return null
+        }
+
+        // Iterates through the array to extract each data element.
+        for (i in 0..articleResult.size - 1) {
+
+            // Retrieves the current Article.
+            val article = articleResult[i]
+
+            // Assigns values accordingly (null should the data element not exist).
+            val title = if (article.title != null) article.title else null
+            val url = if (article.url != null) article.url else null
+            val urlToImage = if (article.urlToImage != null) article.urlToImage else null
+            val publishedAt = if (article.publishedAt != null) article.publishedAt else null
+
+            // Adds each Article to the list.
+            articles.add(Article(title, url, urlToImage, publishedAt))
         }
 
         // Returns the list of articles.

@@ -108,7 +108,7 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         // Initially retrieves the article's URL to display to the user via an explicit intent.
         // Otherwise, displays a Snackbar message informing the user that the URL doesn't exist.
         val articleUrl = article.url
-        if (articleUrl != "null") { // Yes, News API actually returns a String value of null
+        if (articleUrl != null) {
 
             // Instantiates an Intent object to pass data onto SourceViewActivity for
             // web-rendering purposes.
@@ -447,7 +447,7 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             if (mNewsSource != "national-geographic") {
                 for (i in articles.indices) {
                     val urlToImage = articles[i].urlToImage
-                    if (urlToImage.contains("http") || urlToImage.contains("https")) { // Custom way of validating News API's image URLs
+                    if (urlToImage!!.contains("http") || urlToImage!!.contains("https")) { // Custom way of validating News API's image URLs
                         mAQuery!!.id(backdrop_image_view).image(urlToImage)
                         break
                     }

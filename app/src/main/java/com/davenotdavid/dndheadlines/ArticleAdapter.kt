@@ -54,7 +54,7 @@ class ArticleAdapter(private val mListItemClickListener: ListItemClickListener,
         val rankText = (position + 1).toString() + ". "
         val titleSb = StringBuilder()
         titleSb.append(rankText)
-        if (currentArticle.title != "null") { // Yes, News API actually returns a String value of null
+        if (currentArticle.title != null) {
             titleSb.append(currentArticle.title)
         } else {
             titleSb.append("<VOID>")
@@ -64,7 +64,7 @@ class ArticleAdapter(private val mListItemClickListener: ListItemClickListener,
         // Initializes the following reference variable to render a view of how long ago the
         // article was published as of now (user's locale time). Otherwise, hides the view.
         val articlePubDateTime = currentArticle.publishedAt
-        if (articlePubDateTime != "null") { // Yes, News API actually returns a String value of null
+        if (articlePubDateTime != null) {
 
             // Tries to format the publish time properly prior to setting it as text. Otherwise,
             // catches an exception and sets the text invisible.
@@ -135,9 +135,9 @@ class ArticleAdapter(private val mListItemClickListener: ListItemClickListener,
      *                                     # of time-attribute parts.
      */
     @Throws(IndexOutOfBoundsException::class)
-    private fun formatUTCDateTime(utcDateTime: String): String {
+    private fun formatUTCDateTime(utcDateTime: String?): String {
         val dateTimeSb = StringBuilder(utcDateTime)
-        dateTimeSb.deleteCharAt(utcDateTime.length - 1)
+        dateTimeSb.deleteCharAt(utcDateTime!!.length - 1)
         val dateTime = dateTimeSb.toString()
         val formattedDateTime = dateTime.replace('T', ' ')
         val dateTimeParts = formattedDateTime.split(" ".toRegex()).dropLastWhile {
