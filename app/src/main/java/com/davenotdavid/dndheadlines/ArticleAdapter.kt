@@ -112,8 +112,8 @@ class ArticleAdapter(private val mListItemClickListener: ListItemClickListener,
      */
     inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
             View.OnClickListener {
-        val mArticleTitleTV: TextView = itemView.findViewById(R.id.article_title) as TextView
-        val mPublishTimeTV: TextView = itemView.findViewById(R.id.publish_time_ago) as TextView
+        val mArticleTitleTV: TextView = itemView.findViewById<TextView>(R.id.article_title)
+        val mPublishTimeTV: TextView = itemView.findViewById<TextView>(R.id.publish_time_ago)
 
         init {
             itemView.setOnClickListener(this)
