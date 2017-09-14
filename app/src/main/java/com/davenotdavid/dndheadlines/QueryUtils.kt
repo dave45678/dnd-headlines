@@ -36,7 +36,7 @@ object QueryUtils {
             // Reassigns the value of the (string) response.
             jsonResponse = response.body()?.string()
         } catch (e: Exception) {
-            Log.e(LOG_TAG, "Problem making the HTTP request.", e)
+            Log.e(LOG_TAG, "Problem making the HTTP request", e)
         }
 
         // Extracts relevant data from the JSON response and creates a list of Articles to return.
@@ -45,49 +45,32 @@ object QueryUtils {
 
     /**
      * Returns a list of [Article] objects after parsing and extracting relevant data from the JSON
-     * (string) response.
+     * string response.
      */
     private fun extractDataFromJson(jsonResponse: String?): List<Article>? {
 
-        // Returns immediately should the JSON string be empty or null.
-        if (jsonResponse == null || jsonResponse.isEmpty()) {
+        // Returns immediately out of this method should the JSON string param be null.
+        if (jsonResponse == null) {
             return null
         }
 
-        // Creates an empty ArrayList to add Articles to.
-        val articles = mutableListOf<Article>()
+        // Initializes a mutable list to eventually return a list of project data.
+        var articles = mutableListOf<Article>()
 
-        // Uses GSON to parse the JSON string as an object, and then into a JSON array of data.
+        // Utilizes the GSON library to parse the JSON string response into a list of article data
+        // by Article as its collection type - each article's JSON key is referenced from each
+        // Article var/val attribute names in order to retrieve the respective JSON value.
         val gson = Gson()
         val collectionType = object : TypeToken<Collection<Article>>(){}.type
-        var articleResult = emptyArray<Article>()
         try {
             val jsonObject = gson.fromJson(jsonResponse, JsonObject::class.java)
             val jsonArray = jsonObject.getAsJsonArray("articles")
             val enums = gson.fromJson<Collection<Article>>(jsonArray, collectionType)
-
-            // Reassigns the array to an iterable list of JSON data.
-            articleResult = enums.toTypedArray<Article>()
+            articles = enums.toMutableList<Article>()
         } catch (e: Exception) {
             Log.e(LOG_TAG, "Problem parsing the article JSON results", e)
 
             return null
-        }
-
-        // Iterates through the array to extract each data element.
-        for (i in 0..articleResult.size - 1) {
-
-            // Retrieves the current Article.
-            val article = articleResult[i]
-
-            // Assigns values accordingly (null should the data element not exist).
-            val title = if (article.title != null) article.title else null
-            val url = if (article.url != null) article.url else null
-            val urlToImage = if (article.urlToImage != null) article.urlToImage else null
-            val publishedAt = if (article.publishedAt != null) article.publishedAt else null
-
-            // Adds each Article to the list.
-            articles.add(Article(title, url, urlToImage, publishedAt))
         }
 
         // Returns the list of articles.
