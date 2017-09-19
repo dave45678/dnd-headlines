@@ -33,6 +33,12 @@ class SourceViewActivity : AppCompatActivity() {
         // Sets up a up/home button for the action bar.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        // Sets a listener on the SwipeRefreshLayout that basically reloads the WebView should the
+        // user perform a swipe.
+        swipeRefreshLayout.setOnRefreshListener {
+            webView.reload()
+        }
+
         // Allows the WebView to be zoomable.
         webView.settings.builtInZoomControls = true
 
@@ -40,13 +46,13 @@ class SourceViewActivity : AppCompatActivity() {
         // load time.
         webView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(webView: WebView, progress: Int) {
+
+                // Sets the toolbar's title and subtitle from the WebView, accordingly.
                 toolbar.title = webView.title
                 toolbar.subtitle = webView.url
 
-                // Invoked once at most right when a new page is opened.
-                if (webView.canGoBack()) {
-                    progressBar.visibility = View.VISIBLE
-                }
+                // Displays the progress bar for a loading UI.
+                progressBar.visibility = View.VISIBLE
 
                 // Updates the progress bar determinantly.
                 progressBar.progress = progress
@@ -56,6 +62,9 @@ class SourceViewActivity : AppCompatActivity() {
 
                     // Hides the progress bar.
                     progressBar.visibility = View.GONE
+
+                    // Disables the swipe-refresh UI if it hasn't already.
+                    swipeRefreshLayout.isRefreshing = false
 
                     // Scrolls the NestedScrollView (that consists of the WebView) to the top.
                     nestedScrollView.scrollTo(0, 0)
