@@ -22,7 +22,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 
-import com.androidquery.AQuery
+import com.squareup.picasso.Picasso
 
 import kotlinx.android.synthetic.main.activity_article.*
 
@@ -46,9 +46,6 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
 
     // Field used to retrieve the news-source parameter.
     private var mNewsSource: String? = null
-
-    // Android Query (AQuery) field used for caching images from online.
-    private var mAQuery: AQuery? = null
 
     // SharedPreferences object field that's used for user preference data throughout the app's
     // lifecycle.
@@ -149,9 +146,6 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         // Sets the news source preference during the app's initial runtime as well as during
         // configuration changes.
         setNewsSource()
-
-        // Instantiates the following to cache images with a URL.
-        mAQuery = AQuery(this)
 
         // Sets a custom Toolbar that gets displayed after its CollapsingToolbar Layout collapses.
         setSupportActionBar(toolbar)
@@ -424,7 +418,9 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             for (i in articles.indices) {
                 val urlToImage = articles[i].urlToImage
                 if (urlToImage!!.contains("http") || urlToImage!!.contains("https")) { // Custom way of validating News API's image URLs
-                    mAQuery!!.id(backdrop_image_view).image(urlToImage)
+                    Picasso.with(backdrop_image_view.context)
+                            .load(urlToImage)
+                            .into(backdrop_image_view)
                     break
                 }
             }
