@@ -38,10 +38,10 @@ class SourceViewActivity : AppCompatActivity() {
 
         // Addresses things that may impact browser UI, particularly progress updates of the URL's
         // load time.
-        webView.setWebChromeClient(object : WebChromeClient() {
+        webView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(webView: WebView, progress: Int) {
-                toolbar.setTitle(webView.title)
-                toolbar.setSubtitle(webView.url)
+                toolbar.title = webView.title
+                toolbar.subtitle = webView.url
 
                 // Invoked once at most right when a new page is opened.
                 if (webView.canGoBack()) {
@@ -61,10 +61,10 @@ class SourceViewActivity : AppCompatActivity() {
                     nestedScrollView.scrollTo(0, 0)
                 }
             }
-        })
+        }
 
         // Addresses things that may impact the rendering of content, particularly web errors.
-        webView.setWebViewClient(object : WebViewClient() {
+        webView.webViewClient = object : WebViewClient() {
             override fun onReceivedError(webView: WebView, request: WebResourceRequest,
                                          error: WebResourceError) {
                 super.onReceivedError(webView, request, error)
@@ -72,7 +72,7 @@ class SourceViewActivity : AppCompatActivity() {
                 // Logs the web error.
                 Log.e(LOG_TAG, error.toString())
             }
-        })
+        }
 
         // Finally loads the source's URL to the WebView.
         webView.loadUrl(intent.getStringExtra("source_url"))
@@ -85,41 +85,43 @@ class SourceViewActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        // Dismisses the Activity should the action bar's up/home button be pressed.
-        if (item.itemId == android.R.id.home) {
-            webView.clearCache(true) // Clears the app's cache
+        // Responds to certain functionality depending on which menu item was selected.
+        when (item.itemId) {
+            android.R.id.home -> {
+                webView.clearCache(true) // Clears the app's cache
 
-            finish()
+                finish()
 
-            return true
+                return true
+            } R.id.actionReload -> {
+                webView.reload() // Reloads the web page
 
-        // Reloads the web page.
-        } else if (item.itemId == R.id.actionReload) {
-            webView.reload()
+                return true
+            } R.id.actionBack -> {
 
-            return true
+                // The WebView goes back in history, but otherwise displays a Toast if it's not
+                // possible.
+                if (webView.canGoBack()) {
+                    webView.goBack()
+                } else {
+                    Toast.makeText(this, getString(R.string.no_back_history_toast),
+                            Toast.LENGTH_SHORT).show()
+                }
 
-        // The WebView goes back in history, but otherwise displays a Toast if it's not possible.
-        } else if (item.itemId == R.id.actionBack) {
-            if (webView.canGoBack()) {
-                webView.goBack()
-            } else {
-                Toast.makeText(this, getString(R.string.no_back_history_toast),
-                        Toast.LENGTH_SHORT).show()
+                return true
+            } R.id.actionForward -> {
+
+                // The WebView goes forward in history, but otherwise displays a Toast if it's not
+                // possible.
+                if (webView.canGoForward()) {
+                    webView.goForward()
+                } else {
+                    Toast.makeText(this, getString(R.string.no_forward_history_toast),
+                            Toast.LENGTH_SHORT).show()
+                }
+
+                return true
             }
-
-            return true
-
-        // The WebView goes forward in history, but otherwise displays a Toast if it's not possible.
-        } else if (item.itemId == R.id.actionForward) {
-            if (webView.canGoForward()) {
-                webView.goForward()
-            } else {
-                Toast.makeText(this, getString(R.string.no_forward_history_toast),
-                        Toast.LENGTH_SHORT).show()
-            }
-
-            return true
         }
 
         return super.onOptionsItemSelected(item)

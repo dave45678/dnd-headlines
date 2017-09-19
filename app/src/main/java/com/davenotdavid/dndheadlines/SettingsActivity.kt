@@ -21,11 +21,13 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        // Dismisses the Activity should the back button (action bar) be pressed.
-        if (item.itemId == android.R.id.home) {
-            finish()
+        // Dismisses the Activity should the back button be pressed.
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
 
-            return true
+                return true
+            }
         }
 
         return super.onOptionsItemSelected(item)
