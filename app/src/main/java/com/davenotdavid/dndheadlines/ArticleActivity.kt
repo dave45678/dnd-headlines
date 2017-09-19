@@ -8,7 +8,6 @@ import android.content.Loader
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.support.v7.preference.PreferenceManager
-import android.media.MediaPlayer
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.support.design.widget.Snackbar
@@ -166,15 +165,11 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         // Sets the adapter on the RecyclerView so its list can be populated with UI.
         articleRecyclerView.adapter = ArticleAdapter(this, mutableListOf<Article>())
 
-        // MediaPlayer object used for sound UI.
-        val buttonSound = MediaPlayer.create(this, R.raw.button_sound)
-
         // Sets the floating action button clickable with the following refresh functionality.
-        // TODO: To get rid of or not?
         refreshFab.setOnClickListener {
 
-            // Plays a button sound when the refresh button is clicked.
-            buttonSound.start()
+            // Displays the swipe-refresh UI.
+            swipeRefreshLayout.isRefreshing = true
 
             // Restarts a Loader.
             runLoader(true)
