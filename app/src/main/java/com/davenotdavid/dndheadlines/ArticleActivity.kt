@@ -37,8 +37,8 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
     // Log tag constant.
     private val LOG_TAG = ArticleActivity::class.java.simpleName
 
-    // ID constant for the loader.
-    private val ARTICLE_LOADER_ID = 1
+    // Loader ID constant.
+    private val ARTICLE_LOADER_ID = 100
 
     // String constant that represents the News API endpoint URL that later appends query
     // parameters.
@@ -46,16 +46,6 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
 
     // Field used to retrieve the news-source parameter.
     private var mNewsSource: String? = null
-
-    // Boolean flag used for indicating whether the refresh button was pressed or not.
-    private var mPageRefresh: Boolean = false
-
-    // Boolean flag used for indicating whether to force a loader to fetch data or not.
-    private var mForceLoad: Boolean = false
-
-    // Boolean flag used for indicating whether to react accordingly should a settings preference
-    // be changed.
-    private var mPrefsChanged: Boolean = false
 
     // Android Query (AQuery) field used for caching images from online.
     private var mAQuery: AQuery? = null
@@ -68,11 +58,11 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_article)
 
-        // Invokes the following to initialize/instantiate UI.
+        // Invokes the following to initialize/instantiate the Activity's UI.
         init()
 
-        // Invokes the following to begin the data-fetching process via loaders.
-        runLoaders()
+        // Invokes the following to begin the data-fetching process via a Loader.
+        runLoader(false)
     }
 
     override fun onDestroy() {
@@ -83,18 +73,25 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.settings, menu) // Inflates the settings menu file
+
+        // Inflates the settings menu file.
+        menuInflater.inflate(R.menu.settings, menu)
+
+        // True to display.
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         // Opens up SettingsActivity via an explicit intent should the following menu item be
-        // clicked.
-        if (item.itemId == R.id.action_settings) {
-            val settingsIntent = Intent(this, SettingsActivity::class.java)
-            startActivity(settingsIntent)
-            return true
+        // selected.
+        when (item.itemId) {
+            R.id.action_settings -> {
+                val settingsIntent = Intent(this, SettingsActivity::class.java)
+                startActivity(settingsIntent)
+
+                return true
+            }
         }
 
         return super.onOptionsItemSelected(item)
@@ -122,21 +119,27 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
     }
 
     /**
-     * Initialization/instantiation method for UI.
+     * Initialization/instantiation method for the Activity's UI.
      */
     private fun init() {
 
         // Initially sets the title as "Loading..." to display a loading UI.
         collapsing_toolbar.title = getString(R.string.toolbar_loading_title)
 
+        // Displays the swipe-refresh UI for initial runtime.
+        swipeRefreshLayout.isRefreshing = true
+
+        // Sets a listener on the SwipeRefreshLayout to respond accordingly whenever the user runs
+        // the swipe-refresh gesture.
+        swipeRefreshLayout.setOnRefreshListener {
+
+            // Runs a loader to provide a refresh UI for populating updated data.
+            runLoader(true)
+        }
+
         // Makes the RecyclerView scroll down linearally as well as have a fixed size.
         article_recycler_view.layoutManager = LinearLayoutManager(this)
         article_recycler_view.setHasFixedSize(true)
-
-        // Sets values for the following flags each time the Activity is created.
-        mForceLoad = true
-        mPageRefresh = false
-        mPrefsChanged = false
 
         // References the PreferenceManager to use throughout the app, and then registers it with
         // OnSharedPreferenceChangeListener.
@@ -173,19 +176,14 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         val buttonSound = MediaPlayer.create(this, R.raw.button_sound)
 
         // Sets the floating action button clickable with the following refresh functionality.
+        // TODO: To get rid of or not?
         refresh_fab.setOnClickListener {
 
             // Plays a button sound when the refresh button is clicked.
             buttonSound.start()
 
-            // Sets the flag to true to be addressed later on.
-            mPageRefresh = true
-
-            // Sets the flag to true to re-force a loader.
-            mForceLoad = true
-
-            // Reruns the loaders.
-            runLoaders()
+            // Restarts a Loader.
+            runLoader(true)
         }
     }
 
@@ -200,10 +198,12 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
     }
 
     /**
-     * Runs loaders to fetch data via an HTTP request URL only if the user's device has connection.
+     * Runs a Loader to fetch data via an HTTP request only if the user's device has connection.
+     *
+     * @param restartLoader is a Boolean flag that indicates whether a Loader should be either
+     *        initialized or restarted.
      */
-    private fun runLoaders() {
-        //Log.d(LOG_TAG, "runLoaders()");
+    private fun runLoader(restartLoader: Boolean) {
 
         // Sets the toolbar's title to "Loading..." for a loading UI.
         collapsing_toolbar.title = getString(R.string.toolbar_loading_title)
@@ -220,15 +220,10 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         // Initializes and runs loaders should there be network connection. Otherwise, displays UI
         // related to an empty state.
         if (networkInfo != null && networkInfo.isConnected) {
-            //Log.d(LOG_TAG, "runLoaders(): Connected to network");
 
-            // Displays the ProgressBar only if the user has network connection.
-            progress_bar.visibility = View.VISIBLE
-
-            // Hides the following views and restarts the loader should either flag be true.
-            // Otherwise, initializes the loader.
-            if (mPageRefresh || mPrefsChanged) {
-                article_recycler_view.visibility = View.INVISIBLE
+            // Restarts a Loader should the flag param be true. Otherwise, initializes and runs a
+            // Loader.
+            if (restartLoader) {
 
                 // Temporarily hides the TextView only if it's already visible.
                 if (empty_text_view.visibility == View.VISIBLE) {
@@ -236,43 +231,23 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
                 }
 
                 loaderManager.restartLoader(ARTICLE_LOADER_ID, null, this)
-
-                // Resets the flag back to false should it be true.
-                if (mPrefsChanged) mPrefsChanged = false
             } else {
                 loaderManager.initLoader(ARTICLE_LOADER_ID, null, this)
             }
         } else {
-            //Log.d(LOG_TAG, "runLoaders(): Can't connect to network");
 
-            // Displays the following Snackbar message.
-            Snackbar.make(activity_article, getString(R.string.snackbar_no_internet_connection),
-                    Snackbar.LENGTH_SHORT).setAction("Action", null).show()
+            // Disables the swipe-refresh UI.
+            swipeRefreshLayout.isRefreshing = false
 
             // Sets the toolbar's title to "Error".
             collapsing_toolbar.title = getString(R.string.toolbar_error_title)
 
-            // Resets the flag back to false.
-            if (mPageRefresh) mPageRefresh = false
-
             // Updates the empty state view with a no-connection-error message while hiding the
             // RecyclerView.
+            // TODO: Consider changing the following text message
             empty_text_view.setText(R.string.no_internet_connection)
             empty_text_view.visibility = View.VISIBLE
             article_recycler_view.visibility = View.INVISIBLE
-        }
-    }
-
-    /**
-     * Displays the following Snackbar message when the page is refreshed, and then sets the flag
-     * back to false.
-     */
-    private fun displayRefreshSnackbar() {
-        if (mPageRefresh) {
-            Snackbar.make(activity_article, getString(R.string.snackbar_page_refreshed),
-                    Snackbar.LENGTH_SHORT).setAction("Action", null).show()
-
-            mPageRefresh = false
         }
     }
 
@@ -284,26 +259,23 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
      * @param key is the SharedPreferences key.
      */
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        //Log.d(LOG_TAG, "onSharedPreferenceChanged()");
-
         if (key == getString(R.string.settings_news_sources_key)) {
-
-            // Sets the flag to true since a preference has changed.
-            mPrefsChanged = true
-
-            // Sets the flag to true to reload the task asynchronously.
-            mForceLoad = true
 
             // Updates the news source preference, accordingly.
             setNewsSource()
 
-            // Reruns the loader.
-            runLoaders()
+            // Restarts a Loader.
+            runLoader(true)
         }
     }
 
+    /**
+     * Instantiates and returns a new Loader for the given ID.
+     */
     override fun onCreateLoader(loaderId: Int, bundle: Bundle?): Loader<List<Article>> {
-        //Log.d(LOG_TAG, "onCreateLoader()");
+
+        // List instance used for storing raw JSON data from the background task.
+        var articleJson: List<Article>? = null
 
         // Initializes the News API endpoint URL as a URI to build and eventually append upon.
         val baseUri = Uri.parse(NEWS_ENDPOINT_URL)
@@ -314,46 +286,55 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         uriBuilder.appendQueryParameter("source", mNewsSource)
         uriBuilder.appendQueryParameter("apiKey", getString(R.string.news_api_key))
 
-        // Returns the following AsyncTaskLoader.
+        // Returns an anonymous class instance of AsyncTaskLoader to eventually return a list of
+        // article data.
         return object : AsyncTaskLoader<List<Article>>(this) {
 
             /**
-             * Invoked whenever the user returns to the app after being minimized.
+             * Initiates the load.
              */
             override fun onStartLoading() {
-                //Log.d(LOG_TAG, "onStartLoading()");
 
-                // Only forces a load should the flag be true for the sake of not consistently
-                // running loaders in the background (say, when the user reopens this app).
-                if (mForceLoad) {
+                // Forces a load should the article JSON data not exist as cached results.
+                // Otherwise, delivers the existing JSON data.
+                if (articleJson == null) {
                     forceLoad()
+                } else {
+                    deliverResult(articleJson)
                 }
             }
 
             /**
-             * Background thread.
+             * Runs the load asynchronously. Performs the network request with a String value of
+             * the endpoint URI, parses the JSON response, and extracts a list of article data to
+             * return from the Utils object.
              */
-            override fun loadInBackground(): List<Article>? {
-                //Log.d(LOG_TAG, "loadInBackground()");
+            override fun loadInBackground(): List<Article>? =
+                    QueryUtils.fetchArticleData(uriBuilder.toString())
 
-                // Performs the network request with a String value of the endpoint URI, parses the
-                // JSON response, and extracts a list of article data to return from the Utils
-                // object.
-                return QueryUtils.fetchArticleData(uriBuilder.toString())
+            /**
+             * Sends the result of the load to the registered listener.
+             */
+            override fun deliverResult(data: List<Article>?) {
+                articleJson = data // Assigns the article data var
+
+                super.deliverResult(data)
             }
         }
     }
 
+    /**
+     * Invoked right after the background thread finished its tasks. That said, this function
+     * serves as the UI thread.
+     */
     override fun onLoadFinished(loader: Loader<List<Article>>, articles: List<Article>?) {
-        //Log.d(LOG_TAG, "onLoadFinished");
 
-        // Hides the progress bar after the data-fetching process is complete.
-        progress_bar.visibility = View.INVISIBLE
-
-        // Displays a refresh-Snackbar message and returns out of onLoadFinished() immediately
-        // should the article data be either null or empty.
+        // Runs the following functionality and returns out of onLoadFinished() immediately should
+        // the article data be either null or empty.
         if (articles == null || articles.isEmpty()) {
-            displayRefreshSnackbar()
+
+            // Disables the swipe-refresh UI.
+            swipeRefreshLayout.isRefreshing = false
 
             // Sets the toolbar's title to "Error".
             collapsing_toolbar.title = getString(R.string.toolbar_error_title)
@@ -434,27 +415,21 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             collapsing_toolbar.title = getString(R.string.settings_news_sources_wsj_label)
         }
 
-        // Adds the list of Articles to the adapter's dataset, and renders backdrop images
-        // accordingly should it not be null nor empty.
-        if (articles != null && !articles.isEmpty()) {
-            //Log.d(LOG_TAG, "onLoadFinished(): Adding articles and rendering backdrop images");
+        // Renders newly loaded data into the following Adapter.
+        article_recycler_view.adapter = ArticleAdapter(this, articles)
 
-            article_recycler_view.adapter = ArticleAdapter(this, articles)
-
-            // Renders the backdrop image accordingly should the news source not be National
-            // Geographic (their images are too big to scale down). Otherwise, renders National
-            // Geographic's logo.
-            if (mNewsSource != "national-geographic") {
-                for (i in articles.indices) {
-                    val urlToImage = articles[i].urlToImage
-                    if (urlToImage!!.contains("http") || urlToImage!!.contains("https")) { // Custom way of validating News API's image URLs
-                        mAQuery!!.id(backdrop_image_view).image(urlToImage)
-                        break
-                    }
+        // Renders the backdrop image accordingly should the news source not be National Geographic
+        // (their images are too big to scale down). Otherwise, renders National Geographic's logo.
+        if (mNewsSource != "national-geographic") {
+            for (i in articles.indices) {
+                val urlToImage = articles[i].urlToImage
+                if (urlToImage!!.contains("http") || urlToImage!!.contains("https")) { // Custom way of validating News API's image URLs
+                    mAQuery!!.id(backdrop_image_view).image(urlToImage)
+                    break
                 }
-            } else {
-                backdrop_image_view.setImageResource(R.drawable.national_geo_logo)
             }
+        } else {
+            backdrop_image_view.setImageResource(R.drawable.national_geo_logo)
         }
 
         // Hides the empty state view, and makes the RecyclerView visible should the data-fetching
@@ -462,22 +437,14 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         empty_text_view.visibility = View.INVISIBLE
         article_recycler_view.visibility = View.VISIBLE
 
-        // Invokes the following to display a Snackbar message after successfully refreshing the
-        // article page.
-        displayRefreshSnackbar()
-
-        // After the loader runs successfully up to this point, the following flag is set to false
-        // so that the loader won't run anymore unnecessarily.
-        mForceLoad = false
+        // Disables the swipe-refresh UI.
+        swipeRefreshLayout.isRefreshing = false
     }
 
     /**
      * Invoked when the app closes.
-     *
-     * @param loader is the passed-in loader that could be addressed.
      */
     override fun onLoaderReset(loader: Loader<List<Article>>) {
-        //Log.d(LOG_TAG, "onLoaderReset()");
 
         // "Clears" out the existing data since the loader resetted.
         article_recycler_view.adapter = ArticleAdapter(this, mutableListOf<Article>())
