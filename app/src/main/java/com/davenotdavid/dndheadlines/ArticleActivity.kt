@@ -45,11 +45,11 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
     private val NEWS_ENDPOINT_URL = "https://newsapi.org/v1/articles"
 
     // Field used to retrieve the news-source parameter.
-    private var mNewsSource: String? = null
+    private var newsSource: String? = null
 
     // SharedPreferences object field that's used for user preference data throughout the app's
     // lifecycle.
-    private var mSharedPrefs: SharedPreferences? = null
+    private var sharedPrefs: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +66,7 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         super.onDestroy()
 
         // Unregisters the SharedPreferences from OnSharedPreferenceChangeListener.
-        mSharedPrefs!!.unregisterOnSharedPreferenceChangeListener(this)
+        sharedPrefs!!.unregisterOnSharedPreferenceChangeListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -140,8 +140,8 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
 
         // References the PreferenceManager to use throughout the app, and then registers it with
         // OnSharedPreferenceChangeListener.
-        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
-        mSharedPrefs!!.registerOnSharedPreferenceChangeListener(this)
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+        sharedPrefs!!.registerOnSharedPreferenceChangeListener(this)
 
         // Sets the news source preference during the app's initial runtime as well as during
         // configuration changes.
@@ -185,7 +185,7 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
      * Setter for the news source preference.
      */
     private fun setNewsSource() {
-        mNewsSource = mSharedPrefs!!.getString(
+        newsSource = sharedPrefs!!.getString(
                 getString(R.string.settings_news_sources_key),
                 getString(R.string.settings_news_sources_default)
         )
@@ -277,7 +277,7 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
 
         // Appends the following query parameters onto the URI. The "sortBy" parameter is defaulted
         // as "top news" for every source. Also, the user's news source preference is appended.
-        uriBuilder.appendQueryParameter("source", mNewsSource)
+        uriBuilder.appendQueryParameter("source", newsSource)
         uriBuilder.appendQueryParameter("apiKey", getString(R.string.news_api_key))
 
         // Returns an anonymous class instance of AsyncTaskLoader to eventually return a list of
@@ -344,69 +344,69 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
 
         // Sets the toolbar's title to the respective news source name.
         // TODO: Use when statement
-        if (mNewsSource == getString(R.string.settings_news_sources_abc_news_au_value)) {
+        if (newsSource == getString(R.string.settings_news_sources_abc_news_au_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_abc_news_au_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_al_jazeera_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_al_jazeera_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_al_jazeera_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_ars_technica_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_ars_technica_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_ars_technica_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_assoc_press_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_assoc_press_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_assoc_press_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_bbc_news_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_bbc_news_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_bbc_news_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_bloomberg_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_bloomberg_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_bloomberg_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_breitbart_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_breitbart_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_breitbart_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_bus_insider_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_bus_insider_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_bus_insider_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_daily_mail_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_daily_mail_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_daily_mail_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_engadget_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_engadget_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_engadget_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_ent_weekly_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_ent_weekly_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_ent_weekly_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_fin_times_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_fin_times_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_fin_times_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_fortune_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_fortune_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_fortune_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_fourfourtwo_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_fourfourtwo_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_fourfourtwo_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_fox_sports_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_fox_sports_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_fox_sports_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_source_default_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_source_default_value)) {
             collapsingToolbar.title = getString(R.string.google_news)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_ign_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_ign_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_ign_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_mashable_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_mashable_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_mashable_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_metro_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_metro_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_metro_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_mtv_news_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_mtv_news_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_mtv_news_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_nat_geographic_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_nat_geographic_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_nat_geographic_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_ny_magazine_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_ny_magazine_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_ny_magazine_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_nfl_news_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_nfl_news_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_nfl_news_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_reuters_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_reuters_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_reuters_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_talksport_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_talksport_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_talksport_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_techcrunch_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_techcrunch_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_techcrunch_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_techradar_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_techradar_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_techradar_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_guardian_uk_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_guardian_uk_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_guardian_uk_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_the_hindu_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_the_hindu_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_the_hindu_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_the_lad_bible_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_the_lad_bible_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_the_lad_bible_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_the_nyt_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_the_nyt_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_the_nyt_label)
-        } else if (mNewsSource == getString(R.string.settings_news_sources_wsj_value)) {
+        } else if (newsSource == getString(R.string.settings_news_sources_wsj_value)) {
             collapsingToolbar.title = getString(R.string.settings_news_sources_wsj_label)
         }
 
@@ -415,7 +415,7 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
 
         // Renders the backdrop image accordingly should the news source not be National Geographic
         // (their images are too big to scale down). Otherwise, renders National Geographic's logo.
-        if (mNewsSource != "national-geographic") {
+        if (newsSource != "national-geographic") {
             for (i in articles.indices) {
                 val urlToImage = articles[i].urlToImage
                 if (urlToImage!!.contains("http") || urlToImage!!.contains("https")) { // Custom way of validating News API's image URLs

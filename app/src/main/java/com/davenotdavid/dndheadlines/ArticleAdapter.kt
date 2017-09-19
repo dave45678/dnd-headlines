@@ -16,8 +16,8 @@ import android.text.format.DateUtils.MINUTE_IN_MILLIS
  * Adapter subclass of [RecyclerView] that renders a list of Article data that's clickable via a
  * custom interface.
  */
-class ArticleAdapter(private val mListItemClickListener: ListItemClickListener,
-                     private val mArticleData: List<Article>) :
+class ArticleAdapter(private val listItemClickListener: ListItemClickListener,
+                     private val articleData: List<Article>) :
         RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() {
 
     // Log tag constant.
@@ -28,7 +28,7 @@ class ArticleAdapter(private val mListItemClickListener: ListItemClickListener,
         fun onListItemClick(article: Article)
     }
 
-    override fun getItemCount(): Int = mArticleData.size
+    override fun getItemCount(): Int = articleData.size
 
     /**
      * Inflates a layout for the list items.
@@ -45,7 +45,7 @@ class ArticleAdapter(private val mListItemClickListener: ListItemClickListener,
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
 
         // Initializes the following Article being viewed at the moment.
-        val currentArticle = mArticleData[position]
+        val currentArticle = articleData[position]
 
         // Sets the article's title as text with ranks (top 10 at most). Otherwise (which is
         // unlikely, but better safe than sorry!), "<VOID>" is set.
@@ -118,7 +118,7 @@ class ArticleAdapter(private val mListItemClickListener: ListItemClickListener,
         }
 
         override fun onClick(v: View?) {
-            mListItemClickListener.onListItemClick(mArticleData[adapterPosition])
+            listItemClickListener.onListItemClick(articleData[adapterPosition])
         }
     }
 
