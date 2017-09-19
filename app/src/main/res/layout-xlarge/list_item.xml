@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent" >
 
         <TextView
-            android:id="@+id/article_title"
+            android:id="@+id/articleTitle"
             android:textSize="39sp"
             android:textColor="@color/colorBlack"
             android:maxLines="2"
@@ -28,13 +28,13 @@
             tools:text="Article Title"/>
 
         <TextView
-            android:id="@+id/publish_time_ago"
+            android:id="@+id/publishTimeAgo"
             android:textSize="32sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/article_title"
+            app:layout_constraintTop_toBottomOf="@+id/articleTitle"
             tools:text="Some time ago"/>
 
     </android.support.constraint.ConstraintLayout>

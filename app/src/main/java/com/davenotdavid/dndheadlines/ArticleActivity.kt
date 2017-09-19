@@ -83,7 +83,7 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         // Opens up SettingsActivity via an explicit intent should the following menu item be
         // selected.
         when (item.itemId) {
-            R.id.action_settings -> {
+            R.id.actionSettings -> {
                 val settingsIntent = Intent(this, SettingsActivity::class.java)
                 startActivity(settingsIntent)
 
@@ -110,7 +110,7 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             intent.putExtra("source_url", articleUrl)
             startActivity(intent)
         } else {
-            Snackbar.make(activity_article, getString(R.string.snackbar_no_article_preview),
+            Snackbar.make(activityArticle, getString(R.string.snackbar_no_article_preview),
                     Snackbar.LENGTH_SHORT).setAction("Action", null).show()
         }
     }
@@ -121,7 +121,7 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
     private fun init() {
 
         // Initially sets the title as "Loading..." to display a loading UI.
-        collapsing_toolbar.title = getString(R.string.toolbar_loading_title)
+        collapsingToolbar.title = getString(R.string.toolbar_loading_title)
 
         // Displays the swipe-refresh UI for initial runtime.
         swipeRefreshLayout.isRefreshing = true
@@ -135,8 +135,8 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         }
 
         // Makes the RecyclerView scroll down linearally as well as have a fixed size.
-        article_recycler_view.layoutManager = LinearLayoutManager(this)
-        article_recycler_view.setHasFixedSize(true)
+        articleRecyclerView.layoutManager = LinearLayoutManager(this)
+        articleRecyclerView.setHasFixedSize(true)
 
         // References the PreferenceManager to use throughout the app, and then registers it with
         // OnSharedPreferenceChangeListener.
@@ -151,10 +151,10 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         setSupportActionBar(toolbar)
 
         // Enables nested scrolling for the ListView which only works for Lollipop (21) and above.
-        ViewCompat.setNestedScrollingEnabled(article_recycler_view, true)
+        ViewCompat.setNestedScrollingEnabled(articleRecyclerView, true)
 
         // Sets the custom News API attribution image clickable for branding guideline purposes.
-        attribution_imgview.setOnClickListener {
+        attributionImgView.setOnClickListener {
 
             // Instantiates an Intent object to pass data onto SourceViewActivity for web-rendering
             // purposes.
@@ -164,14 +164,14 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         }
 
         // Sets the adapter on the RecyclerView so its list can be populated with UI.
-        article_recycler_view.adapter = ArticleAdapter(this, mutableListOf<Article>())
+        articleRecyclerView.adapter = ArticleAdapter(this, mutableListOf<Article>())
 
         // MediaPlayer object used for sound UI.
         val buttonSound = MediaPlayer.create(this, R.raw.button_sound)
 
         // Sets the floating action button clickable with the following refresh functionality.
         // TODO: To get rid of or not?
-        refresh_fab.setOnClickListener {
+        refreshFab.setOnClickListener {
 
             // Plays a button sound when the refresh button is clicked.
             buttonSound.start()
@@ -200,7 +200,7 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
     private fun runLoader(restartLoader: Boolean) {
 
         // Sets the toolbar's title to "Loading..." for a loading UI.
-        collapsing_toolbar.title = getString(R.string.toolbar_loading_title)
+        collapsingToolbar.title = getString(R.string.toolbar_loading_title)
 
         // Retrieves a reference to the LoaderManager in order to interact with loaders.
         val loaderManager = loaderManager
@@ -220,8 +220,8 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             if (restartLoader) {
 
                 // Temporarily hides the TextView only if it's already visible.
-                if (empty_text_view.visibility == View.VISIBLE) {
-                    empty_text_view.visibility = View.INVISIBLE
+                if (emptyTextView.visibility == View.VISIBLE) {
+                    emptyTextView.visibility = View.INVISIBLE
                 }
 
                 loaderManager.restartLoader(ARTICLE_LOADER_ID, null, this)
@@ -234,14 +234,14 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             swipeRefreshLayout.isRefreshing = false
 
             // Sets the toolbar's title to "Error".
-            collapsing_toolbar.title = getString(R.string.toolbar_error_title)
+            collapsingToolbar.title = getString(R.string.toolbar_error_title)
 
             // Updates the empty state view with a no-connection-error message while hiding the
             // RecyclerView.
             // TODO: Consider changing the following text message
-            empty_text_view.setText(R.string.no_internet_connection)
-            empty_text_view.visibility = View.VISIBLE
-            article_recycler_view.visibility = View.INVISIBLE
+            emptyTextView.setText(R.string.no_internet_connection)
+            emptyTextView.visibility = View.VISIBLE
+            articleRecyclerView.visibility = View.INVISIBLE
         }
     }
 
@@ -331,86 +331,87 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             swipeRefreshLayout.isRefreshing = false
 
             // Sets the toolbar's title to "Error".
-            collapsing_toolbar.title = getString(R.string.toolbar_error_title)
+            collapsingToolbar.title = getString(R.string.toolbar_error_title)
 
             // Updates the empty state view with a no-results-found message while hiding the
             // recycler view.
-            empty_text_view.setText(R.string.no_results_found)
-            empty_text_view.visibility = View.VISIBLE
-            article_recycler_view.visibility = View.INVISIBLE
+            emptyTextView.setText(R.string.no_results_found)
+            emptyTextView.visibility = View.VISIBLE
+            articleRecyclerView.visibility = View.INVISIBLE
 
             return
         }
 
         // Sets the toolbar's title to the respective news source name.
+        // TODO: Use when statement
         if (mNewsSource == getString(R.string.settings_news_sources_abc_news_au_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_abc_news_au_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_abc_news_au_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_al_jazeera_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_al_jazeera_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_al_jazeera_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_ars_technica_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_ars_technica_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_ars_technica_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_assoc_press_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_assoc_press_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_assoc_press_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_bbc_news_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_bbc_news_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_bbc_news_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_bloomberg_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_bloomberg_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_bloomberg_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_breitbart_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_breitbart_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_breitbart_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_bus_insider_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_bus_insider_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_bus_insider_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_daily_mail_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_daily_mail_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_daily_mail_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_engadget_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_engadget_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_engadget_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_ent_weekly_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_ent_weekly_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_ent_weekly_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_fin_times_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_fin_times_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_fin_times_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_fortune_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_fortune_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_fortune_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_fourfourtwo_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_fourfourtwo_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_fourfourtwo_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_fox_sports_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_fox_sports_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_fox_sports_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_source_default_value)) {
-            collapsing_toolbar.title = getString(R.string.google_news)
+            collapsingToolbar.title = getString(R.string.google_news)
         } else if (mNewsSource == getString(R.string.settings_news_sources_ign_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_ign_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_ign_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_mashable_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_mashable_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_mashable_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_metro_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_metro_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_metro_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_mtv_news_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_mtv_news_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_mtv_news_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_nat_geographic_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_nat_geographic_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_nat_geographic_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_ny_magazine_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_ny_magazine_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_ny_magazine_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_nfl_news_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_nfl_news_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_nfl_news_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_reuters_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_reuters_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_reuters_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_talksport_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_talksport_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_talksport_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_techcrunch_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_techcrunch_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_techcrunch_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_techradar_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_techradar_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_techradar_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_guardian_uk_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_guardian_uk_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_guardian_uk_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_the_hindu_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_the_hindu_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_the_hindu_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_the_lad_bible_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_the_lad_bible_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_the_lad_bible_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_the_nyt_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_the_nyt_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_the_nyt_label)
         } else if (mNewsSource == getString(R.string.settings_news_sources_wsj_value)) {
-            collapsing_toolbar.title = getString(R.string.settings_news_sources_wsj_label)
+            collapsingToolbar.title = getString(R.string.settings_news_sources_wsj_label)
         }
 
         // Renders newly loaded data into the following Adapter.
-        article_recycler_view.adapter = ArticleAdapter(this, articles)
+        articleRecyclerView.adapter = ArticleAdapter(this, articles)
 
         // Renders the backdrop image accordingly should the news source not be National Geographic
         // (their images are too big to scale down). Otherwise, renders National Geographic's logo.
@@ -418,20 +419,20 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             for (i in articles.indices) {
                 val urlToImage = articles[i].urlToImage
                 if (urlToImage!!.contains("http") || urlToImage!!.contains("https")) { // Custom way of validating News API's image URLs
-                    Picasso.with(backdrop_image_view.context)
+                    Picasso.with(backdropImageView.context)
                             .load(urlToImage)
-                            .into(backdrop_image_view)
+                            .into(backdropImageView)
                     break
                 }
             }
         } else {
-            backdrop_image_view.setImageResource(R.drawable.national_geo_logo)
+            backdropImageView.setImageResource(R.drawable.national_geo_logo)
         }
 
         // Hides the empty state view, and makes the RecyclerView visible should the data-fetching
         // process be successful.
-        empty_text_view.visibility = View.INVISIBLE
-        article_recycler_view.visibility = View.VISIBLE
+        emptyTextView.visibility = View.INVISIBLE
+        articleRecyclerView.visibility = View.VISIBLE
 
         // Disables the swipe-refresh UI.
         swipeRefreshLayout.isRefreshing = false
@@ -443,7 +444,7 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
     override fun onLoaderReset(loader: Loader<List<Article>>) {
 
         // "Clears" out the existing data since the loader resetted.
-        article_recycler_view.adapter = ArticleAdapter(this, mutableListOf<Article>())
+        articleRecyclerView.adapter = ArticleAdapter(this, mutableListOf<Article>())
     }
 
     /**

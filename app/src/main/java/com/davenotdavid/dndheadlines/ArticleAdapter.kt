@@ -28,9 +28,7 @@ class ArticleAdapter(private val mListItemClickListener: ListItemClickListener,
         fun onListItemClick(article: Article)
     }
 
-    override fun getItemCount(): Int {
-        return mArticleData.size
-    }
+    override fun getItemCount(): Int = mArticleData.size
 
     /**
      * Inflates a layout for the list items.
@@ -112,8 +110,8 @@ class ArticleAdapter(private val mListItemClickListener: ListItemClickListener,
      */
     inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
             View.OnClickListener {
-        val mArticleTitleTV: TextView = itemView.findViewById<TextView>(R.id.article_title)
-        val mPublishTimeTV: TextView = itemView.findViewById<TextView>(R.id.publish_time_ago)
+        val mArticleTitleTV: TextView = itemView.findViewById<TextView>(R.id.articleTitle)
+        val mPublishTimeTV: TextView = itemView.findViewById<TextView>(R.id.publishTimeAgo)
 
         init {
             itemView.setOnClickListener(this)

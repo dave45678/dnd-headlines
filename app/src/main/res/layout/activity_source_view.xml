@@ -20,7 +20,7 @@
             app:layout_scrollFlags="scroll|enterAlways" />
 
         <ProgressBar
-            android:id="@+id/progress_bar"
+            android:id="@+id/progressBar"
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:progressTint="@color/colorWhite"
             android:progressBackgroundTint="@color/colorPrimaryLessLight"
@@ -31,13 +31,13 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/nested_scroll_view"
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <WebView
-            android:id="@+id/web_view"
+            android:id="@+id/webView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

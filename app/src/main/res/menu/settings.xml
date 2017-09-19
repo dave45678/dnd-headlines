@@ -5,7 +5,7 @@
     tools:context="com.davenotdavid.dndheadlines.ArticleActivity">
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/actionSettings"
         android:title="@string/settings_menu_item"
         android:icon="@drawable/ic_settings_white"
         android:orderInCategory="1"

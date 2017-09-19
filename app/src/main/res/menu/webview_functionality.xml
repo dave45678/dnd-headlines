@@ -5,19 +5,19 @@
     tools:context="com.davenotdavid.dndheadlines.SourceViewActivity">
 
     <item
-        android:id="@+id/action_reload"
+        android:id="@+id/actionReload"
         android:title="@string/reload_menu_item"
         android:orderInCategory="1"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_back"
+        android:id="@+id/actionBack"
         android:title="@string/back_menu_item"
         android:orderInCategory="2"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_forward"
+        android:id="@+id/actionForward"
         android:title="@string/forward_menu_item"
         android:orderInCategory="3"
         app:showAsAction="never" />

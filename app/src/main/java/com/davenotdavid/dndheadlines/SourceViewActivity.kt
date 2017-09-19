@@ -34,37 +34,37 @@ class SourceViewActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // Allows the WebView to be zoomable.
-        web_view.settings.builtInZoomControls = true
+        webView.settings.builtInZoomControls = true
 
         // Addresses things that may impact browser UI, particularly progress updates of the URL's
         // load time.
-        web_view.setWebChromeClient(object : WebChromeClient() {
+        webView.setWebChromeClient(object : WebChromeClient() {
             override fun onProgressChanged(webView: WebView, progress: Int) {
                 toolbar.setTitle(webView.title)
                 toolbar.setSubtitle(webView.url)
 
                 // Invoked once at most right when a new page is opened.
                 if (webView.canGoBack()) {
-                    progress_bar.visibility = View.VISIBLE
+                    progressBar.visibility = View.VISIBLE
                 }
 
                 // Updates the progress bar determinantly.
-                progress_bar.progress = progress
+                progressBar.progress = progress
 
                 // Runs the following functionality when the web page finishes loading.
                 if (progress == 100) {
 
                     // Hides the progress bar.
-                    progress_bar.visibility = View.GONE
+                    progressBar.visibility = View.GONE
 
                     // Scrolls the NestedScrollView (that consists of the WebView) to the top.
-                    nested_scroll_view.scrollTo(0, 0)
+                    nestedScrollView.scrollTo(0, 0)
                 }
             }
         })
 
         // Addresses things that may impact the rendering of content, particularly web errors.
-        web_view.setWebViewClient(object : WebViewClient() {
+        webView.setWebViewClient(object : WebViewClient() {
             override fun onReceivedError(webView: WebView, request: WebResourceRequest,
                                          error: WebResourceError) {
                 super.onReceivedError(webView, request, error)
@@ -75,7 +75,7 @@ class SourceViewActivity : AppCompatActivity() {
         })
 
         // Finally loads the source's URL to the WebView.
-        web_view.loadUrl(intent.getStringExtra("source_url"))
+        webView.loadUrl(intent.getStringExtra("source_url"))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -87,22 +87,22 @@ class SourceViewActivity : AppCompatActivity() {
 
         // Dismisses the Activity should the action bar's up/home button be pressed.
         if (item.itemId == android.R.id.home) {
-            web_view.clearCache(true) // Clears the app's cache
+            webView.clearCache(true) // Clears the app's cache
 
             finish()
 
             return true
 
         // Reloads the web page.
-        } else if (item.itemId == R.id.action_reload) {
-            web_view.reload()
+        } else if (item.itemId == R.id.actionReload) {
+            webView.reload()
 
             return true
 
         // The WebView goes back in history, but otherwise displays a Toast if it's not possible.
-        } else if (item.itemId == R.id.action_back) {
-            if (web_view.canGoBack()) {
-                web_view.goBack()
+        } else if (item.itemId == R.id.actionBack) {
+            if (webView.canGoBack()) {
+                webView.goBack()
             } else {
                 Toast.makeText(this, getString(R.string.no_back_history_toast),
                         Toast.LENGTH_SHORT).show()
@@ -111,9 +111,9 @@ class SourceViewActivity : AppCompatActivity() {
             return true
 
         // The WebView goes forward in history, but otherwise displays a Toast if it's not possible.
-        } else if (item.itemId == R.id.action_forward) {
-            if (web_view.canGoForward()) {
-                web_view.goForward()
+        } else if (item.itemId == R.id.actionForward) {
+            if (webView.canGoForward()) {
+                webView.goForward()
             } else {
                 Toast.makeText(this, getString(R.string.no_forward_history_toast),
                         Toast.LENGTH_SHORT).show()
@@ -129,10 +129,10 @@ class SourceViewActivity : AppCompatActivity() {
 
         // The web page goes back in history only if there are stacks in the history. Otherwise,
         // dismisses the Activity.
-        if (web_view.canGoBack()) {
-            web_view.goBack()
+        if (webView.canGoBack()) {
+            webView.goBack()
         } else {
-            web_view.clearCache(true) // Clears the app's cache
+            webView.clearCache(true) // Clears the app's cache
             super.onBackPressed()
         }
     }
