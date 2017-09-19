@@ -25,7 +25,7 @@
             android:progressTint="@color/colorWhite"
             android:progressBackgroundTint="@color/colorPrimaryLessLight"
             android:layout_width="match_parent"
-            android:layout_height="3dp"
+            android:layout_height="2dp"
             tools:progress="45" />
 
     </android.support.design.widget.AppBarLayout>
