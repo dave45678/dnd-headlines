@@ -278,6 +278,10 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             }
         } else {
 
+            // Displays a Snackbar message informing the user that there's no internet connection.
+            Snackbar.make(activityArticle, getString(R.string.snackbar_no_internet_connection),
+                    Snackbar.LENGTH_SHORT).setAction("Action", null).show()
+
             // Disables the swipe-refresh UI.
             swipeRefreshLayout.isRefreshing = false
 
