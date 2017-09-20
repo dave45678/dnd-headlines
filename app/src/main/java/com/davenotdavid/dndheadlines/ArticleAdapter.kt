@@ -13,7 +13,7 @@ import org.joda.time.format.DateTimeFormat
 import android.text.format.DateUtils.MINUTE_IN_MILLIS
 
 /**
- * Adapter subclass of [RecyclerView] that renders a list of Article data that's clickable via a
+ * Adapter subclass of [RecyclerView] that renders a list of [Article] data that's clickable via a
  * custom interface.
  */
 class ArticleAdapter(private val listItemClickListener: ListItemClickListener,
@@ -26,6 +26,7 @@ class ArticleAdapter(private val listItemClickListener: ListItemClickListener,
     // Interface for the list items that are clickable.
     interface ListItemClickListener {
         fun onListItemClick(article: Article)
+        fun onListItemLongClick(article: Article)
     }
 
     override fun getItemCount(): Int = articleData.size
@@ -109,16 +110,34 @@ class ArticleAdapter(private val listItemClickListener: ListItemClickListener,
      * RecyclerView's ViewHolder class.
      */
     inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-            View.OnClickListener {
+            View.OnClickListener, View.OnLongClickListener {
         val mArticleTitleTV: TextView = itemView.findViewById<TextView>(R.id.articleTitle)
         val mPublishTimeTV: TextView = itemView.findViewById<TextView>(R.id.publishTimeAgo)
 
+        /**
+         * Init block that basically sets each list item to listen to click events.
+         */
         init {
             itemView.setOnClickListener(this)
+            itemView.setOnLongClickListener(this)
         }
 
+        /**
+         * Callback interface method that basically passes a list item, or [Article], as an arg to
+         * the [ArticleAdapter]'s child classes based on the position of the Article clicked.
+         */
         override fun onClick(v: View?) {
             listItemClickListener.onListItemClick(articleData[adapterPosition])
+        }
+
+        /**
+         * Callback interface method that basically passes a list item, or [Article], as an arg to
+         * the [ArticleAdapter]'s child classes based on the position of the Article long-clicked.
+         */
+        override fun onLongClick(p0: View?): Boolean {
+            listItemClickListener.onListItemLongClick(articleData[adapterPosition])
+
+            return true // true if the callback consumed the long click
         }
     }
 

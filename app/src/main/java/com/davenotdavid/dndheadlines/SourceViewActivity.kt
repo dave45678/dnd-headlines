@@ -1,5 +1,7 @@
 package com.davenotdavid.dndheadlines
 
+import android.content.Intent
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -130,6 +132,13 @@ class SourceViewActivity : AppCompatActivity() {
                 }
 
                 return true
+            } R.id.actionBrowser -> {
+
+                // Instantiates an implicit Intent in view mode with a URI-parsed article URL to
+                // display the article in a browser.
+                val browserIntent = Intent(Intent.ACTION_VIEW,
+                        Uri.parse(intent.getStringExtra("source_url")))
+                startActivity(browserIntent)
             }
         }
 

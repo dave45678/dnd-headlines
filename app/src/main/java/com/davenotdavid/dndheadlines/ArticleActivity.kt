@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -94,11 +95,12 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
     }
 
     /**
-     * RecyclerView's click method functionality.
+     * Interface-inherited function from [ArticleAdapter] that listens to when one of its
+     * RecyclerView's list items is clicked.
      */
     override fun onListItemClick(article: Article) {
 
-        // Initially retrieves the article's URL to display to the user via an explicit intent.
+        // Initially retrieves the article's URL to display to the user via an explicit Intent.
         // Otherwise, displays a Snackbar message informing the user that the URL doesn't exist.
         val articleUrl = article.url
         if (articleUrl != null) {
@@ -112,6 +114,57 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
             Snackbar.make(activityArticle, getString(R.string.snackbar_no_article_preview),
                     Snackbar.LENGTH_SHORT).setAction("Action", null).show()
         }
+    }
+
+    // Var field that keeps track of an article's URL.
+    private var articleUrl: String? = null
+
+    /**
+     * Interface-inherited function from [ArticleAdapter] that listens to when one of its
+     * RecyclerView's list items is long-clicked.
+     */
+    override fun onListItemLongClick(article: Article) {
+
+        // Retrieves the param article's URL and reassigns it to the var field.
+        articleUrl = article.url
+
+        // Opens the Context Menu (that was registered earlier) for the following View.
+        openContextMenu(activityArticle)
+    }
+
+    /**
+     * Invoked from openContextMenu() to create and display a Context Menu.
+     */
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?,
+                                     menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+
+        // Sets the article's URL as the Context Menu's header title.
+        menu?.setHeaderTitle(articleUrl)
+
+        // Adds a menu option as follows.
+        menu?.add(0, v!!.id, 0, "Open in Browser")
+    }
+
+    /**
+     * Callback method that listens to a MenuItem being selected from the Context Menu.
+     */
+    override fun onContextItemSelected(item: MenuItem?): Boolean {
+
+        // Runs the following cases depending on which MenuItem was selected.
+        when (item?.title) {
+            "Open in Browser" -> {
+
+                // Instantiates an implicit Intent in view mode with a URI-parsed article URL to
+                // display the article in a browser.
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(articleUrl))
+                startActivity(browserIntent)
+
+                return true
+            }
+        }
+
+        return super.onContextItemSelected(item)
     }
 
     /**
@@ -136,6 +189,9 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         // Makes the RecyclerView scroll down linearally as well as have a fixed size.
         articleRecyclerView.layoutManager = LinearLayoutManager(this)
         articleRecyclerView.setHasFixedSize(true)
+
+        // Registers a Context Menu to be shown for the following View.
+        registerForContextMenu(activityArticle)
 
         // References the PreferenceManager to use throughout the app, and then registers it with
         // OnSharedPreferenceChangeListener.

@@ -15,6 +15,7 @@
     <string name="reload_menu_item">Reload</string>
     <string name="back_menu_item">Back</string>
     <string name="forward_menu_item">Forward</string>
+    <string name="browser_menu_item">Open in Browser</string>
     <string name="no_back_history_toast">Can\'t go back in history</string>
     <string name="no_forward_history_toast">Can\'t go back in history</string>
 

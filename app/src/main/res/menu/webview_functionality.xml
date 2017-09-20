@@ -22,4 +22,10 @@
         android:orderInCategory="3"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/actionBrowser"
+        android:title="@string/browser_menu_item"
+        android:orderInCategory="4"
+        app:showAsAction="never" />
+
 </menu>
