@@ -175,9 +175,6 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         // Initially sets the title as "Loading..." to display a loading UI.
         collapsingToolbar.title = getString(R.string.toolbar_loading_title)
 
-        // Displays the swipe-refresh UI for initial runtime.
-        swipeRefreshLayout.isRefreshing = true
-
         // Sets a listener on the SwipeRefreshLayout to respond accordingly whenever the user runs
         // the swipe-refresh gesture.
         swipeRefreshLayout.setOnRefreshListener {
@@ -224,9 +221,6 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
         // Sets the floating action button clickable with the following refresh functionality.
         refreshFab.setOnClickListener {
 
-            // Displays the swipe-refresh UI.
-            swipeRefreshLayout.isRefreshing = true
-
             // Restarts a Loader.
             runLoader(true)
         }
@@ -249,6 +243,9 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
      *        initialized or restarted.
      */
     private fun runLoader(restartLoader: Boolean) {
+
+        // Displays the swipe-refresh UI.
+        swipeRefreshLayout.isRefreshing = true
 
         // Sets the toolbar's title to "Loading..." for a loading UI.
         collapsingToolbar.title = getString(R.string.toolbar_loading_title)
