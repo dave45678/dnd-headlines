@@ -289,7 +289,6 @@ class ArticleActivity : AppCompatActivity(), LoaderCallbacks<List<Article>>,
 
             // Updates the empty state view with a no-connection-error message while hiding the
             // RecyclerView.
-            // TODO: Consider changing the following text message
             emptyTextView.setText(R.string.no_internet_connection)
             emptyTextView.visibility = View.VISIBLE
             articleRecyclerView.visibility = View.INVISIBLE
