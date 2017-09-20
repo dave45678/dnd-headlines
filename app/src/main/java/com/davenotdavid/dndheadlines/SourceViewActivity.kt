@@ -134,10 +134,9 @@ class SourceViewActivity : AppCompatActivity() {
                 return true
             } R.id.actionBrowser -> {
 
-                // Instantiates an implicit Intent in view mode with a URI-parsed article URL to
-                // display the article in a browser.
-                val browserIntent = Intent(Intent.ACTION_VIEW,
-                        Uri.parse(intent.getStringExtra("source_url")))
+                // Instantiates an implicit Intent in view mode with a URI-parsed URL (the current
+                // page in the WebView) to display the article in a browser.
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(webView.url))
                 startActivity(browserIntent)
             }
         }
